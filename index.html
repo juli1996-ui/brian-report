@@ -625,8 +625,8 @@ async function fetchAndRender(url) {
     const { id, gid } = parseSheetUrl(url);
     if (!id) throw new Error('Could not find a spreadsheet ID in that URL.');
 
-    const csvUrl = `https://docs.google.com/spreadsheets/d/${id}/export?format=csv&gid=${gid}`;
-    const resp = await fetch(csvUrl);
+    const csvUrl = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&gid=${gid}&t=${Date.now()}`;
+    const resp = await fetch(csvUrl, { cache: 'no-store' });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
 
     const csv  = await resp.text();
