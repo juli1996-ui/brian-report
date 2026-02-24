@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BlueTree Marketing — Campaign Performance Report</title>
+<title>BlueTree Marketing — Live Campaign Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -34,15 +34,104 @@
     padding: 40px 20px;
   }
 
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
+  .container { max-width: 900px; margin: 0 auto; }
+
+  /* ── Source Bar ── */
+  .source-bar {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
   }
 
-  /* Header */
+  .source-bar label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .source-bar input {
+    flex: 1;
+    min-width: 200px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-muted);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .source-bar input:focus {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .btn-refresh {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    white-space: nowrap;
+  }
+
+  .btn-refresh:hover { background: #3a7bc8; }
+  .btn-refresh:active { transform: scale(0.97); }
+  .btn-refresh:disabled { background: #2a2d4a; color: var(--text-muted); cursor: not-allowed; }
+
+  .btn-refresh svg { transition: transform 0.5s; }
+  .btn-refresh.spinning svg { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .status-dot.idle    { background: var(--text-muted); }
+  .status-dot.loading { background: var(--amber); animation: pulse 0.8s infinite; }
+  .status-dot.ok      { background: var(--green); }
+  .status-dot.err     { background: var(--red); }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .status-text { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+
+  /* ── Error Banner ── */
+  .error-banner {
+    display: none;
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.3);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--red);
+    margin-bottom: 24px;
+  }
+
+  /* ── Header ── */
   .header {
     text-align: center;
-    margin-bottom: 48px;
+    margin-bottom: 40px;
   }
 
   .header-label {
@@ -68,10 +157,7 @@
     margin-bottom: 12px;
   }
 
-  .header-sub span {
-    color: var(--green);
-    font-weight: 600;
-  }
+  .header-sub span { color: var(--green); font-weight: 600; }
 
   .sync-badge {
     display: inline-flex;
@@ -84,23 +170,16 @@
     font-size: 11px;
     color: var(--green);
     font-weight: 600;
-    letter-spacing: 0.5px;
   }
 
-  .sync-dot {
-    width: 6px;
-    height: 6px;
+  .sync-pulse {
+    width: 6px; height: 6px;
     background: var(--green);
     border-radius: 50%;
     animation: pulse 2s infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  /* KPI Cards */
+  /* ── KPI Cards ── */
   .kpi-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -126,9 +205,9 @@
     opacity: 0.7;
   }
 
-  .kpi.blue::before  { background: linear-gradient(90deg, var(--accent), #7bc3ff); }
-  .kpi.green::before { background: linear-gradient(90deg, var(--green), #7fffc4); }
-  .kpi.amber::before { background: linear-gradient(90deg, var(--amber), #ffe066); }
+  .kpi.blue::before   { background: linear-gradient(90deg, var(--accent), #7bc3ff); }
+  .kpi.green::before  { background: linear-gradient(90deg, var(--green), #7fffc4); }
+  .kpi.amber::before  { background: linear-gradient(90deg, var(--amber), #ffe066); }
   .kpi.purple::before { background: linear-gradient(90deg, var(--purple), #c4b5fd); }
 
   .kpi-value {
@@ -138,6 +217,7 @@
     color: #fff;
     line-height: 1;
     margin-bottom: 6px;
+    transition: all 0.3s;
   }
 
   .kpi-label {
@@ -157,12 +237,12 @@
     border-radius: 20px;
   }
 
-  .kpi-badge.green  { background: var(--green-glow); color: var(--green); }
+  .kpi-badge.green  { background: var(--green-glow);  color: var(--green); }
   .kpi-badge.blue   { background: var(--accent-glow); color: var(--accent); }
-  .kpi-badge.amber  { background: var(--amber-glow); color: var(--amber); }
+  .kpi-badge.amber  { background: var(--amber-glow);  color: var(--amber); }
   .kpi-badge.purple { background: var(--purple-glow); color: var(--purple); }
 
-  /* Sections */
+  /* ── Sections ── */
   .section {
     background: var(--card);
     border: 1px solid var(--card-border);
@@ -179,12 +259,7 @@
     margin-bottom: 20px;
   }
 
-  /* Charts */
-  .chart-container {
-    position: relative;
-    height: 280px;
-    margin-bottom: 8px;
-  }
+  .chart-container { position: relative; height: 280px; }
 
   .two-col {
     display: grid;
@@ -193,14 +268,9 @@
     margin-bottom: 24px;
   }
 
-  .two-col .section {
-    margin-bottom: 0;
-  }
+  .two-col .section { margin-bottom: 0; }
 
-  .donut-container {
-    position: relative;
-    height: 220px;
-  }
+  .donut-container { position: relative; height: 220px; }
 
   .donut-legend {
     margin-top: 16px;
@@ -217,27 +287,13 @@
     color: var(--text-muted);
   }
 
-  .legend-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .legend-count { margin-left: auto; font-weight: 600; color: var(--text); }
 
-  .legend-count {
-    margin-left: auto;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  /* Table */
+  /* ── Table ── */
   .table-wrap { overflow-x: auto; }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
 
   thead th {
     text-align: left;
@@ -258,11 +314,7 @@
     color: var(--text);
   }
 
-  tbody td:not(:first-child) {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-  }
-
+  tbody td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
   tbody tr:last-child td { border-bottom: none; }
   tbody tr.highlight td { color: #fff; font-weight: 600; }
 
@@ -270,21 +322,7 @@
   .trend-down { color: var(--red);   font-weight: 600; font-size: 12px; }
   .trend-flat { color: var(--amber); font-weight: 600; font-size: 12px; }
 
-  /* Footer */
-  .footer {
-    text-align: center;
-    margin-top: 40px;
-    padding-top: 24px;
-    border-top: 1px solid var(--card-border);
-  }
-
-  .footer-text {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 8px;
-  }
-
-  /* Projection bar */
+  /* ── Projection ── */
   .proj-row {
     display: flex;
     align-items: center;
@@ -304,7 +342,6 @@
     height: 28px;
     background: rgba(255,255,255,0.04);
     border-radius: 8px;
-    position: relative;
     overflow: hidden;
   }
 
@@ -318,11 +355,33 @@
     font-size: 12px;
     font-weight: 700;
     color: #fff;
-    transition: width 1s ease;
+    transition: width 0.8s ease;
+    min-width: 40px;
   }
 
   .proj-bar.blue  { background: linear-gradient(90deg, rgba(74,144,217,0.3), var(--accent)); }
   .proj-bar.green { background: linear-gradient(90deg, rgba(46,204,113,0.3), var(--green)); }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--card-border);
+  }
+
+  .footer-text { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+
+  /* ── Skeleton shimmer ── */
+  .skeleton {
+    background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 6px;
+    color: transparent !important;
+  }
+
+  @keyframes shimmer { to { background-position: -200% 0; } }
 
   @media (max-width: 700px) {
     .kpi-row    { grid-template-columns: repeat(2, 1fr); }
@@ -332,44 +391,64 @@
     .two-col    { grid-template-columns: 1fr; }
     .proj-row   { flex-direction: column; align-items: stretch; }
     .proj-label { min-width: unset; }
+    .source-bar { flex-direction: column; align-items: stretch; }
   }
 </style>
 </head>
 <body>
-
 <div class="container">
+
+  <!-- Source Bar -->
+  <div class="source-bar">
+    <label>Sheet URL</label>
+    <input id="sheet-url" type="text" placeholder="Paste your Google Sheets URL here…" />
+    <button class="btn-refresh" id="btn-refresh" onclick="handleRefresh()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      </svg>
+      Refresh
+    </button>
+    <div class="status-dot idle" id="status-dot"></div>
+    <span class="status-text" id="status-text">Not loaded</span>
+  </div>
+
+  <!-- Error Banner -->
+  <div class="error-banner" id="error-banner"></div>
 
   <!-- Header -->
   <div class="header">
-    <img src="https://images.squarespace-cdn.com/content/v1/658518476ae2bb7cbb022dd8/5921253f-9867-4a80-af42-766a71729436/BLUE+TREE+MARKETING+Logo_white_transparent+background.png?format=1500w" alt="BlueTree Marketing" style="height: 56px; margin-bottom: 24px; display: block; margin-left: auto; margin-right: auto;">
-    <div class="header-label">Campaign Performance Report</div>
+    <img src="https://images.squarespace-cdn.com/content/v1/658518476ae2bb7cbb022dd8/5921253f-9867-4a80-af42-766a71729436/BLUE+TREE+MARKETING+Logo_white_transparent+background.png?format=1500w"
+         alt="BlueTree Marketing"
+         style="height:56px;margin-bottom:24px;display:block;margin-left:auto;margin-right:auto;">
+    <div class="header-label">Live Campaign Dashboard</div>
     <h1>Brian Rechtman</h1>
-    <div class="header-sub">August 2025 — February 2026 &nbsp;·&nbsp; <span>240 Total Responses</span></div>
+    <div class="header-sub">August 2025 — February 2026 &nbsp;·&nbsp; <span id="header-total">— Total Responses</span></div>
     <div class="sync-badge">
-      <span class="sync-dot"></span>
-      Synced from Google Sheets · Feb 24, 2026
+      <span class="sync-pulse"></span>
+      Last synced: <span id="sync-time">—</span>
     </div>
   </div>
 
   <!-- KPI Cards -->
   <div class="kpi-row">
     <div class="kpi blue">
-      <div class="kpi-value">240</div>
+      <div class="kpi-value" id="kpi-total">—</div>
       <div class="kpi-label">Total Responses</div>
       <div class="kpi-badge blue">7 months</div>
     </div>
     <div class="kpi green">
-      <div class="kpi-value">1.96</div>
+      <div class="kpi-value" id="kpi-feb-rate">—</div>
       <div class="kpi-label">Feb Resp / Day</div>
-      <div class="kpi-badge green">Best pace</div>
+      <div class="kpi-badge green" id="kpi-feb-badge">Current month</div>
     </div>
     <div class="kpi amber">
-      <div class="kpi-value">12</div>
+      <div class="kpi-value" id="kpi-meetings">—</div>
       <div class="kpi-label">Meeting Requests</div>
       <div class="kpi-badge amber">High intent</div>
     </div>
     <div class="kpi purple">
-      <div class="kpi-value">16</div>
+      <div class="kpi-value" id="kpi-forwarded">—</div>
       <div class="kpi-label">Forwarded Internally</div>
       <div class="kpi-badge purple">Warm leads</div>
     </div>
@@ -383,10 +462,8 @@
     </div>
   </div>
 
-  <!-- Monthly Breakdown + Response Types side by side -->
+  <!-- Monthly Breakdown + Response Types -->
   <div class="two-col">
-
-    <!-- Monthly Breakdown -->
     <div class="section">
       <div class="section-title">Monthly Breakdown</div>
       <div class="table-wrap">
@@ -399,56 +476,14 @@
               <th>vs Prev</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>August</td>
-              <td>47</td>
-              <td>1.52</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <td>September</td>
-              <td>48</td>
-              <td>1.60</td>
-              <td class="trend-up">+2%</td>
-            </tr>
-            <tr>
-              <td>October</td>
-              <td>22</td>
-              <td>0.71</td>
-              <td class="trend-down">−54%</td>
-            </tr>
-            <tr>
-              <td>November</td>
-              <td>5</td>
-              <td>0.17</td>
-              <td class="trend-down">−77%</td>
-            </tr>
-            <tr>
-              <td>December</td>
-              <td>15</td>
-              <td>0.48</td>
-              <td class="trend-up">+183%</td>
-            </tr>
-            <tr class="highlight">
-              <td>January</td>
-              <td>56</td>
-              <td>1.81</td>
-              <td class="trend-up">+277%</td>
-            </tr>
-            <tr class="highlight">
-              <td>February *</td>
-              <td>47</td>
-              <td>1.96</td>
-              <td class="trend-up">+8%</td>
-            </tr>
+          <tbody id="monthly-tbody">
+            <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:24px;">Hit Refresh to load data</td></tr>
           </tbody>
         </table>
       </div>
-      <div style="margin-top: 12px; font-size: 11px; color: var(--text-muted);">* Through Feb 24 · 28 days total</div>
+      <div style="margin-top:12px;font-size:11px;color:var(--text-muted);" id="feb-note">* Current month — days elapsed</div>
     </div>
 
-    <!-- Response Type Breakdown -->
     <div class="section">
       <div class="section-title">Response Types</div>
       <div class="donut-container">
@@ -458,87 +493,335 @@
         <div class="legend-item">
           <div class="legend-dot" style="background:#4a90d9;"></div>
           Interested / More Info
-          <span class="legend-count">177</span>
+          <span class="legend-count" id="legend-interested">—</span>
         </div>
         <div class="legend-item">
           <div class="legend-dot" style="background:#a0a8b8;"></div>
           Other
-          <span class="legend-count">31</span>
+          <span class="legend-count" id="legend-other">—</span>
         </div>
         <div class="legend-item">
           <div class="legend-dot" style="background:#a78bfa;"></div>
           Forwarded Internally
-          <span class="legend-count">16</span>
+          <span class="legend-count" id="legend-forwarded">—</span>
         </div>
         <div class="legend-item">
           <div class="legend-dot" style="background:#fbbf24;"></div>
           Meeting Request
-          <span class="legend-count">12</span>
+          <span class="legend-count" id="legend-meetings">—</span>
         </div>
       </div>
     </div>
-
   </div>
 
   <!-- February Projection -->
   <div class="section">
-    <div class="section-title">February Projection (4 days remaining)</div>
-    <div style="margin-bottom: 20px;">
+    <div class="section-title" id="proj-title">February Projection</div>
+    <div style="margin-bottom:20px;">
       <div class="proj-row">
         <div class="proj-label">January (actual)</div>
         <div class="proj-bar-bg">
-          <div class="proj-bar blue" style="width: 84%;">56</div>
+          <div class="proj-bar blue" id="proj-jan-bar" style="width:0%;">—</div>
         </div>
       </div>
       <div class="proj-row">
-        <div class="proj-label">Feb so far</div>
+        <div class="proj-label">Feb — so far</div>
         <div class="proj-bar-bg">
-          <div class="proj-bar blue" style="width: 70%;">47</div>
+          <div class="proj-bar blue" id="proj-sofar-bar" style="width:0%;">—</div>
         </div>
       </div>
       <div class="proj-row">
-        <div class="proj-label" style="color: var(--green); font-weight: 600;">Feb — at current pace</div>
+        <div class="proj-label" style="color:var(--green);font-weight:600;">Feb — at current pace</div>
         <div class="proj-bar-bg">
-          <div class="proj-bar green" style="width: 82%;">55</div>
-        </div>
-      </div>
-      <div class="proj-row">
-        <div class="proj-label" style="color: var(--green); font-weight: 600;">Feb — if momentum holds</div>
-        <div class="proj-bar-bg">
-          <div class="proj-bar green" style="width: 90%;">~60</div>
+          <div class="proj-bar green" id="proj-pace-bar" style="width:0%;">—</div>
         </div>
       </div>
     </div>
-    <div style="font-size: 12px; color: var(--text-muted);">At 1.96 resp/day × 4 remaining days = ~8 more · Projected total: 55–60</div>
+    <div style="font-size:12px;color:var(--text-muted);" id="proj-note">—</div>
   </div>
 
   <!-- Footer -->
   <div class="footer">
-    <img src="https://images.squarespace-cdn.com/content/v1/658518476ae2bb7cbb022dd8/5921253f-9867-4a80-af42-766a71729436/BLUE+TREE+MARKETING+Logo_white_transparent+background.png?format=1500w" alt="BlueTree Marketing" style="height: 36px; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto; opacity: 0.85;">
-    <div class="footer-text">Data synced from Google Sheets · February 24, 2026 · 240 responses · Aug 2025 – Feb 2026</div>
+    <img src="https://images.squarespace-cdn.com/content/v1/658518476ae2bb7cbb022dd8/5921253f-9867-4a80-af42-766a71729436/BLUE+TREE+MARKETING+Logo_white_transparent+background.png?format=1500w"
+         alt="BlueTree Marketing"
+         style="height:36px;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;opacity:0.85;">
+    <div class="footer-text" id="footer-sync">Paste a Google Sheets URL above and click Refresh to load live data.</div>
   </div>
 
 </div>
-
 <script>
-  // ── Trend Chart ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+//  Config
+// ─────────────────────────────────────────────────────────
+const DEFAULT_URL = 'https://docs.google.com/spreadsheets/d/1v4QHwimjnpG999JXXq1AYIcViUOZ-0TDzCeqz2b7ONM/edit?gid=1206033729#gid=1206033729';
+const LS_KEY = 'btm_sheet_url';
+
+const MONTH_ORDER  = ['Agosto','Septiembre','Octubre','Noviembre','Diciembre','Enero','Febrero'];
+const MONTH_LABELS = { Agosto:'Aug', Septiembre:'Sep', Octubre:'Oct', Noviembre:'Nov', Diciembre:'Dec', Enero:'Jan', Febrero:'Feb' };
+const MONTH_DAYS   = { Agosto:31, Septiembre:30, Octubre:31, Noviembre:30, Diciembre:31, Enero:31, Febrero:28 };
+
+let trendChart = null;
+let typeChart  = null;
+
+// ─────────────────────────────────────────────────────────
+//  Init
+// ─────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  initCharts();
+  const saved = localStorage.getItem(LS_KEY) || DEFAULT_URL;
+  document.getElementById('sheet-url').value = saved;
+  fetchAndRender(saved);
+});
+
+// ─────────────────────────────────────────────────────────
+//  UI helpers
+// ─────────────────────────────────────────────────────────
+function setStatus(state, msg) {
+  const dot  = document.getElementById('status-dot');
+  const text = document.getElementById('status-text');
+  const btn  = document.getElementById('btn-refresh');
+  const err  = document.getElementById('error-banner');
+
+  dot.className = 'status-dot ' + state;
+  err.style.display = 'none';
+
+  if (state === 'loading') {
+    text.textContent = 'Fetching data…';
+    btn.disabled = true;
+    btn.classList.add('spinning');
+  } else if (state === 'ok') {
+    text.textContent = msg || 'Up to date';
+    btn.disabled = false;
+    btn.classList.remove('spinning');
+  } else if (state === 'err') {
+    text.textContent = 'Failed';
+    btn.disabled = false;
+    btn.classList.remove('spinning');
+    err.style.display = 'block';
+    err.innerHTML = `<strong>Could not load data:</strong> ${msg}<br><br>
+      Make sure the Google Sheet is set to <strong>Share → Anyone with the link → Viewer</strong>.`;
+  } else {
+    text.textContent = 'Not loaded';
+    btn.disabled = false;
+    btn.classList.remove('spinning');
+  }
+}
+
+// ─────────────────────────────────────────────────────────
+//  Refresh handler
+// ─────────────────────────────────────────────────────────
+function handleRefresh() {
+  const url = document.getElementById('sheet-url').value.trim();
+  if (!url) return;
+  fetchAndRender(url);
+}
+
+// ─────────────────────────────────────────────────────────
+//  Fetch + parse
+// ─────────────────────────────────────────────────────────
+async function fetchAndRender(url) {
+  setStatus('loading');
+  try {
+    const { id, gid } = parseSheetUrl(url);
+    if (!id) throw new Error('Could not find a spreadsheet ID in that URL.');
+
+    const csvUrl = `https://docs.google.com/spreadsheets/d/${id}/export?format=csv&gid=${gid}`;
+    const resp = await fetch(csvUrl);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+    const csv  = await resp.text();
+    const rows = parseCSV(csv);
+
+    renderDashboard(rows);
+    localStorage.setItem(LS_KEY, url);
+    setStatus('ok', 'Up to date');
+  } catch (e) {
+    setStatus('err', e.message);
+  }
+}
+
+function parseSheetUrl(url) {
+  const idM  = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+  const gidM = url.match(/[#?&]gid=(\d+)/);
+  return { id: idM ? idM[1] : null, gid: gidM ? gidM[1] : '0' };
+}
+
+function parseCSV(csv) {
+  const lines = csv.split('\n');
+  if (lines.length < 2) return [];
+  const headers = splitLine(lines[0]);
+  return lines.slice(1)
+    .filter(l => l.trim())
+    .map(l => {
+      const vals = splitLine(l);
+      return headers.reduce((o, h, i) => ({ ...o, [h.trim()]: (vals[i] || '').trim() }), {});
+    })
+    .filter(r => r['Month'] && r['Month'].length > 0);
+}
+
+function splitLine(line) {
+  const out = []; let cur = ''; let q = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') { q = !q; }
+    else if (c === ',' && !q) { out.push(cur); cur = ''; }
+    else { cur += c; }
+  }
+  out.push(cur);
+  return out;
+}
+
+// ─────────────────────────────────────────────────────────
+//  Render
+// ─────────────────────────────────────────────────────────
+function renderDashboard(rows) {
+  // ── Count by month ──
+  const byMonth = {};
+  MONTH_ORDER.forEach(m => byMonth[m] = 0);
+  let meetings = 0, forwarded = 0, interested = 0, other = 0;
+
+  rows.forEach(row => {
+    const m = row['Month'];
+    if (m in byMonth) byMonth[m]++;
+    const t = row['Response Type'] || '';
+    if      (t === 'Meeting Request')                   meetings++;
+    else if (t === 'Forwarded Internally')              forwarded++;
+    else if (t === 'Interested / Requesting More Info') interested++;
+    else                                                other++;
+  });
+
+  const total = rows.length;
+
+  // ── Feb elapsed days (from latest date in data) ──
+  const febRows = rows.filter(r => r['Month'] === 'Febrero');
+  let febDays = 28;
+  if (febRows.length > 0) {
+    const valid = febRows
+      .map(r => r['Response Date'])
+      .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d))
+      .map(d => new Date(d));
+    if (valid.length > 0)
+      febDays = new Date(Math.max(...valid)).getDate();
+  }
+
+  const febCount     = byMonth['Febrero'];
+  const janCount     = byMonth['Enero'];
+  const febRate      = +(febCount / febDays).toFixed(2);
+  const daysLeft     = 28 - febDays;
+  const febProjected = Math.round(febCount + febRate * daysLeft);
+  const maxBar       = Math.max(janCount, febProjected, 70);
+
+  // ── KPIs ──
+  document.getElementById('kpi-total').textContent     = total;
+  document.getElementById('kpi-feb-rate').textContent  = febRate.toFixed(2);
+  document.getElementById('kpi-meetings').textContent  = meetings;
+  document.getElementById('kpi-forwarded').textContent = forwarded;
+
+  document.getElementById('header-total').textContent = `${total} Total Responses`;
+  document.getElementById('kpi-feb-badge').textContent =
+    febRate > 1.81 ? 'Best pace yet' : 'Current month';
+
+  // ── Sync time ──
+  const now = new Date();
+  document.getElementById('sync-time').textContent = now.toLocaleString('en-US',
+    { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  document.getElementById('footer-sync').textContent =
+    `Data synced from Google Sheets · ${now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})} · ${total} responses`;
+
+  // ── Monthly table ──
+  const tbody = document.getElementById('monthly-tbody');
+  tbody.innerHTML = '';
+  let prev = null;
+  MONTH_ORDER.forEach(m => {
+    const count   = byMonth[m];
+    const days    = m === 'Febrero' ? febDays : MONTH_DAYS[m];
+    const rate    = (count / days).toFixed(2);
+    const isCurr  = m === 'Febrero';
+    const isRecent = m === 'Enero' || m === 'Febrero';
+    const label   = MONTH_LABELS[m] + (isCurr ? ' *' : '');
+
+    let trendHtml = '<span style="color:var(--text-muted)">—</span>';
+    if (prev !== null && prev > 0) {
+      const pct = Math.round((count - prev) / prev * 100);
+      if (count > prev)      trendHtml = `<span class="trend-up">+${pct}%</span>`;
+      else if (count < prev) trendHtml = `<span class="trend-down">${pct}%</span>`;
+      else                   trendHtml = `<span class="trend-flat">0%</span>`;
+    }
+    prev = count;
+
+    tbody.innerHTML += `
+      <tr${isRecent ? ' class="highlight"' : ''}>
+        <td>${label}</td><td>${count}</td><td>${rate}</td><td>${trendHtml}</td>
+      </tr>`;
+  });
+
+  if (daysLeft > 0) {
+    tbody.innerHTML += `
+      <tr style="background:rgba(46,204,113,0.06);">
+        <td style="color:var(--green);font-style:italic;">Feb projected</td>
+        <td style="color:var(--green);font-style:italic;">${febProjected}</td>
+        <td style="color:var(--green);font-style:italic;">${febRate.toFixed(2)}+</td>
+        <td style="color:var(--green);font-style:italic;">—</td>
+      </tr>`;
+  }
+
+  document.getElementById('feb-note').textContent =
+    daysLeft > 0 ? `* Through day ${febDays} of 28 · ${daysLeft} days remaining` : '* Full month complete';
+
+  // ── Projection bars ──
+  const pct = v => Math.min(98, Math.round((v / maxBar) * 100));
+  document.getElementById('proj-title').textContent =
+    `February Projection (${daysLeft} day${daysLeft !== 1 ? 's' : ''} remaining)`;
+  document.getElementById('proj-jan-bar').style.width   = pct(janCount) + '%';
+  document.getElementById('proj-jan-bar').textContent   = janCount;
+  document.getElementById('proj-sofar-bar').style.width = pct(febCount) + '%';
+  document.getElementById('proj-sofar-bar').textContent = febCount;
+  document.getElementById('proj-pace-bar').style.width  = pct(febProjected) + '%';
+  document.getElementById('proj-pace-bar').textContent  = `~${febProjected}`;
+  document.getElementById('proj-note').textContent      =
+    `At ${febRate.toFixed(2)} resp/day × ${daysLeft} remaining days = ~${Math.round(febRate * daysLeft)} more · Projected total: ${febProjected}`;
+
+  // ── Update charts ──
+  const chartCounts = MONTH_ORDER.map(m => byMonth[m]);
+  const chartRates  = MONTH_ORDER.map(m => {
+    const days = m === 'Febrero' ? febDays : MONTH_DAYS[m];
+    return +(byMonth[m] / days * 25).toFixed(2);
+  });
+  const chartLabels = MONTH_ORDER.map(m => MONTH_LABELS[m] + (m === 'Febrero' ? ' *' : ''));
+
+  trendChart.data.labels                   = chartLabels;
+  trendChart.data.datasets[0].data         = chartCounts;
+  trendChart.data.datasets[1].data         = chartRates;
+  trendChart.update();
+
+  typeChart.data.datasets[0].data = [interested, other, forwarded, meetings];
+  typeChart.update();
+
+  // ── Legend counts ──
+  document.getElementById('legend-interested').textContent = interested;
+  document.getElementById('legend-other').textContent      = other;
+  document.getElementById('legend-forwarded').textContent  = forwarded;
+  document.getElementById('legend-meetings').textContent   = meetings;
+}
+
+// ─────────────────────────────────────────────────────────
+//  Chart init (empty, filled on first render)
+// ─────────────────────────────────────────────────────────
+function initCharts() {
+  // Trend
   const tCtx = document.getElementById('trendChart').getContext('2d');
   const tGrad = tCtx.createLinearGradient(0, 0, 0, 280);
-  tGrad.addColorStop(0, 'rgba(74, 144, 217, 0.25)');
-  tGrad.addColorStop(1, 'rgba(74, 144, 217, 0.00)');
+  tGrad.addColorStop(0, 'rgba(74,144,217,0.25)');
+  tGrad.addColorStop(1, 'rgba(74,144,217,0.00)');
 
-  const months     = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb *'];
-  const responses  = [47, 48, 22, 5, 15, 56, 47];
-  const rateX25    = [1.52, 1.60, 0.71, 0.17, 0.48, 1.81, 1.96].map(r => r * 25);
-
-  new Chart(tCtx, {
+  trendChart = new Chart(tCtx, {
     type: 'line',
     data: {
-      labels: months,
+      labels: [],
       datasets: [
         {
           label: 'Responses',
-          data: responses,
+          data: [],
           borderColor: '#4a90d9',
           backgroundColor: tGrad,
           borderWidth: 3,
@@ -552,10 +835,10 @@
         },
         {
           label: 'Resp/Day (×25)',
-          data: rateX25,
+          data: [],
           borderColor: '#2ecc71',
           borderWidth: 2,
-          borderDash: [6, 4],
+          borderDash: [6,4],
           pointBackgroundColor: '#2ecc71',
           pointBorderColor: '#2ecc71',
           pointRadius: 4,
@@ -572,50 +855,33 @@
       plugins: {
         legend: {
           display: true, position: 'top', align: 'end',
-          labels: {
-            color: '#a0a8b8',
-            font: { family: 'DM Sans', size: 11 },
-            boxWidth: 20, padding: 16,
-            usePointStyle: true, pointStyle: 'line'
-          }
+          labels: { color:'#a0a8b8', font:{family:'DM Sans',size:11}, boxWidth:20, padding:16, usePointStyle:true, pointStyle:'line' }
         },
         tooltip: {
-          backgroundColor: '#1e2130',
-          titleColor: '#fff', bodyColor: '#c5c9d6',
-          borderColor: '#333750', borderWidth: 1,
-          titleFont: { family: 'DM Sans', weight: '600', size: 13 },
-          bodyFont: { family: 'DM Sans', size: 12 },
-          padding: 12, cornerRadius: 10, displayColors: true,
-          callbacks: {
-            label: ctx => ctx.datasetIndex === 0
-              ? ' Responses: ' + ctx.raw
-              : ' Resp/Day: ' + (ctx.raw / 25).toFixed(2)
-          }
+          backgroundColor:'#1e2130', titleColor:'#fff', bodyColor:'#c5c9d6',
+          borderColor:'#333750', borderWidth:1,
+          titleFont:{family:'DM Sans',weight:'600',size:13},
+          bodyFont:{family:'DM Sans',size:12},
+          padding:12, cornerRadius:10, displayColors:true,
+          callbacks: { label: ctx => ctx.datasetIndex === 0 ? ` Responses: ${ctx.raw}` : ` Resp/Day: ${(ctx.raw/25).toFixed(2)}` }
         }
       },
       scales: {
-        x: {
-          grid: { color: 'rgba(255,255,255,0.04)' },
-          ticks: { color: '#a0a8b8', font: { family: 'DM Sans', size: 12, weight: '500' } }
-        },
-        y: {
-          grid: { color: 'rgba(255,255,255,0.04)' },
-          ticks: { color: '#a0a8b8', font: { family: 'DM Sans', size: 11 }, stepSize: 10 },
-          beginAtZero: true
-        }
+        x: { grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#a0a8b8',font:{family:'DM Sans',size:12,weight:'500'}} },
+        y: { grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#a0a8b8',font:{family:'DM Sans',size:11},stepSize:10}, beginAtZero:true }
       }
     }
   });
 
-  // ── Response Type Donut ──────────────────────────────────────
+  // Donut
   const dCtx = document.getElementById('typeChart').getContext('2d');
-  new Chart(dCtx, {
+  typeChart = new Chart(dCtx, {
     type: 'doughnut',
     data: {
-      labels: ['Interested / More Info', 'Other', 'Forwarded Internally', 'Meeting Request'],
+      labels: ['Interested / More Info','Other','Forwarded Internally','Meeting Request'],
       datasets: [{
-        data: [177, 31, 16, 12],
-        backgroundColor: ['#4a90d9', '#a0a8b8', '#a78bfa', '#fbbf24'],
+        data: [0,0,0,0],
+        backgroundColor: ['#4a90d9','#a0a8b8','#a78bfa','#fbbf24'],
         borderColor: '#16213e',
         borderWidth: 3,
         hoverOffset: 6,
@@ -628,15 +894,15 @@
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: '#1e2130',
-          titleColor: '#fff', bodyColor: '#c5c9d6',
-          borderColor: '#333750', borderWidth: 1,
-          titleFont: { family: 'DM Sans', weight: '600', size: 13 },
-          bodyFont: { family: 'DM Sans', size: 12 },
-          padding: 12, cornerRadius: 10,
+          backgroundColor:'#1e2130', titleColor:'#fff', bodyColor:'#c5c9d6',
+          borderColor:'#333750', borderWidth:1,
+          titleFont:{family:'DM Sans',weight:'600',size:13},
+          bodyFont:{family:'DM Sans',size:12},
+          padding:12, cornerRadius:10,
           callbacks: {
             label: ctx => {
-              const pct = ((ctx.raw / 240) * 100).toFixed(1);
+              const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
+              const pct   = total > 0 ? ((ctx.raw/total)*100).toFixed(1) : 0;
               return ` ${ctx.raw} responses (${pct}%)`;
             }
           }
@@ -644,7 +910,7 @@
       }
     }
   });
+}
 </script>
-
 </body>
 </html>
