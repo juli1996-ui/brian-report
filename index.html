@@ -301,7 +301,7 @@
          style="height:56px;margin-bottom:24px;display:block;margin-left:auto;margin-right:auto;">
     <div class="header-label">Live Campaign Dashboard</div>
     <h1>Brian Rechtman</h1>
-    <div class="header-sub">August 2025 — Present &nbsp;·&nbsp; <span id="header-total">— Total Responses</span></div>
+    <div class="header-sub">August 2025 — Present &nbsp;·&nbsp; <span id="header-total">— Total Leads</span></div>
     <div class="sync-badge">
       <span class="sync-pulse"></span>
       Last synced: <span id="sync-time">—</span>
@@ -312,12 +312,12 @@
   <div class="kpi-row">
     <div class="kpi blue">
       <div class="kpi-value" id="kpi-total">—</div>
-      <div class="kpi-label">Total Responses</div>
+      <div class="kpi-label">Total Leads</div>
       <div class="kpi-badge blue">All campaigns</div>
     </div>
     <div class="kpi green">
       <div class="kpi-value" id="kpi-rate">—</div>
-      <div class="kpi-label">Resp / Day</div>
+      <div class="kpi-label">Leads / Day</div>
       <div class="kpi-badge green" id="kpi-rate-badge">Current pace</div>
     </div>
     <div class="kpi amber">
@@ -370,7 +370,7 @@
 
     <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:4px;margin-bottom:28px;">
       <div style="font-size:12px;color:var(--text-muted);">📧 <strong style="color:var(--text);">484 emails</strong> per opportunity</div>
-      <div style="font-size:12px;color:var(--text-muted);">📅 <strong style="color:var(--text);">1 meeting</strong> every ~20 responses</div>
+      <div style="font-size:12px;color:var(--text-muted);">📅 <strong style="color:var(--text);">1 meeting</strong> every ~20 leads</div>
       <div style="font-size:12px;color:var(--text-muted);">📈 <strong style="color:var(--green);">Reply → Opp rate: 27.4%</strong> — strong qualifier</div>
     </div>
 
@@ -414,23 +414,23 @@
     </div>
   </div>
 
-  <!-- Response Trend -->
+  <!-- Lead Trend -->
   <div class="section">
-    <div class="section-title">Response Trend</div>
-    <div class="section-sub">Monthly responses vs. daily pace — showing campaign momentum over time</div>
+    <div class="section-title">Lead Trend</div>
+    <div class="section-sub">Monthly leads vs. daily pace — showing campaign momentum over time</div>
     <div class="chart-container">
       <canvas id="trendChart"></canvas>
     </div>
   </div>
 
-  <!-- Monthly Breakdown + Response Types -->
+  <!-- Monthly Breakdown + Lead Types -->
   <div class="two-col">
     <div class="section">
       <div class="section-title">Monthly Breakdown</div>
-      <div class="section-sub">Responses and daily pace by month</div>
+      <div class="section-sub">Leads and daily pace by month</div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Month</th><th>Resp</th><th>/Day</th><th>vs Prev</th></tr></thead>
+          <thead><tr><th>Month</th><th>Leads</th><th>/Day</th><th>vs Prev</th></tr></thead>
           <tbody id="monthly-tbody">
             <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:24px;">Hit Refresh to load</td></tr>
           </tbody>
@@ -439,7 +439,7 @@
       <div style="margin-top:12px;font-size:11px;color:var(--text-muted);" id="feb-note">* Current month</div>
     </div>
     <div class="section">
-      <div class="section-title">Response Types</div>
+      <div class="section-title">Lead Types</div>
       <div class="section-sub">How leads are responding to outreach</div>
       <div class="donut-container">
         <canvas id="typeChart"></canvas>
@@ -483,7 +483,7 @@
 
     <div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:10px;padding:14px 18px;font-size:13px;line-height:1.7;">
       <strong style="color:var(--amber);">✦ Custom Search Query campaign effect</strong><br>
-      <span style="color:var(--text-muted);" id="new-campaign-note">Launched Feb 20, this campaign is only days old and hasn't fully contributed to the response count yet. As it ramps up through March, it has the potential to push responses well above the baseline — making the optimistic scenario the most likely if engagement holds.</span>
+      <span style="color:var(--text-muted);" id="new-campaign-note">Launched Feb 20, this campaign is only days old and hasn't fully contributed to the lead count yet. As it ramps up through March, it has the potential to push leads well above the baseline — making the optimistic scenario the most likely if engagement holds.</span>
     </div>
   </div>
 
@@ -491,14 +491,14 @@
        PREDICTIVE: MILESTONE TRACKER
   ════════════════════════════════════════════ -->
   <div class="section">
-    <div class="section-title">Response Milestones</div>
+    <div class="section-title">Lead Milestones</div>
     <div class="section-sub" id="milestone-sub">At current pace — when will we hit the next targets?</div>
 
     <div class="three-col" id="milestone-cards">
       <!-- Filled dynamically -->
     </div>
 
-    <div style="font-size:12px;color:var(--text-muted);margin-top:4px;" id="milestone-note">* Optimistic dates assume new campaign ramps to ~2.5 resp/day in March</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-top:4px;" id="milestone-note">* Optimistic dates assume new campaign ramps to ~2.5 leads/day in March</div>
   </div>
 
   <!-- ═══════════════════════════════════════════
@@ -525,22 +525,22 @@
       <div class="health-card">
         <div class="health-val" style="color:var(--amber);">5.0%</div>
         <div class="health-label">Opp → Meeting</div>
-        <div class="health-desc">12 meeting requests from 239 opportunities. Every 20 responses generates a meeting</div>
+        <div class="health-desc">12 meeting requests from 239 opportunities. Every 20 leads generates a meeting</div>
       </div>
       <div class="health-card">
         <div class="health-val" id="health-next-meeting" style="color:var(--accent);">—</div>
-        <div class="health-label">Responses to Next Meeting</div>
-        <div class="health-desc">Estimated responses needed until the next meeting request at 5% conversion rate</div>
+        <div class="health-label">Leads to Next Meeting</div>
+        <div class="health-desc">Estimated leads needed until the next meeting request at 5% conversion rate</div>
       </div>
       <div class="health-card">
         <div class="health-val" style="color:var(--teal);">484</div>
         <div class="health-label">Emails / Opportunity</div>
-        <div class="health-desc">Cost to generate 1 qualified response. Use this to plan list size for target outcomes</div>
+        <div class="health-desc">Cost to generate 1 qualified lead. Use this to plan list size for target outcomes</div>
       </div>
       <div class="health-card">
         <div class="health-val" id="health-meetings-march" style="color:var(--green);">—</div>
         <div class="health-label">Projected March Meetings</div>
-        <div class="health-desc">Estimated new meeting requests in March based on forecasted responses × 5%</div>
+        <div class="health-desc">Estimated new meeting requests in March based on forecasted leads × 5%</div>
       </div>
     </div>
   </div>
@@ -728,7 +728,7 @@ function renderDashboard(rows) {
   document.getElementById('kpi-rate').textContent      = febRate.toFixed(2);
   document.getElementById('kpi-rate-badge').textContent = febRate > 1.81 ? 'Best pace yet ↑' : 'Current pace';
   document.getElementById('kpi-projected').textContent = marchConservative + '–' + marchOptimistic;
-  document.getElementById('header-total').textContent  = `${total} Total Responses`;
+  document.getElementById('header-total').textContent  = `${total} Total Leads`;
 
   // Funnel opportunities (live from sheet)
   document.getElementById('funnel-opps').textContent = total;
@@ -737,7 +737,7 @@ function renderDashboard(rows) {
   const now = new Date();
   const fmtDate = d => d.toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' });
   document.getElementById('sync-time').textContent = fmtDate(now);
-  document.getElementById('footer-sync').textContent = `Google Sheets: live · Instantly: synced Feb 24, 2026 via BridgeKit · ${total} total responses`;
+  document.getElementById('footer-sync').textContent = `Google Sheets: live · Instantly: synced Feb 24, 2026 via BridgeKit · ${total} total leads`;
 
   // ── Monthly table ──
   const tbody = document.getElementById('monthly-tbody');
@@ -777,13 +777,13 @@ function renderDashboard(rows) {
   const marchMax = marchOptimistic * 1.1;
   const pct = v => Math.min(97, Math.round(v / marchMax * 100));
   document.getElementById('march-sub').textContent =
-    `At ${febRate.toFixed(2)} resp/day — here's what March looks like across 3 scenarios`;
+    `At ${febRate.toFixed(2)} leads/day — here's what March looks like across 3 scenarios`;
   document.getElementById('bar-conservative').style.width = pct(marchConservative) + '%';
-  document.getElementById('bar-conservative').textContent = marchConservative + ' responses';
+  document.getElementById('bar-conservative').textContent = marchConservative + ' leads';
   document.getElementById('bar-baseline').style.width     = pct(marchBaseline) + '%';
-  document.getElementById('bar-baseline').textContent     = marchBaseline + ' responses';
+  document.getElementById('bar-baseline').textContent     = marchBaseline + ' leads';
   document.getElementById('bar-optimistic').style.width   = '97%';
-  document.getElementById('bar-optimistic').textContent   = marchOptimistic + '+ responses';
+  document.getElementById('bar-optimistic').textContent   = marchOptimistic + '+ leads';
 
   // ── Milestone Tracker ──
   const today = new Date();
@@ -793,7 +793,7 @@ function renderDashboard(rows) {
   const optPace = 2.5; // optimistic pace with new campaign
 
   document.getElementById('milestone-sub').textContent =
-    `Starting from ${total} responses — at ${febRate.toFixed(2)} resp/day current pace`;
+    `Starting from ${total} leads — at ${febRate.toFixed(2)} leads/day current pace`;
 
   const cards = document.getElementById('milestone-cards');
   cards.innerHTML = '';
@@ -810,7 +810,7 @@ function renderDashboard(rows) {
 
     cards.innerHTML += `
       <div class="milestone-card ${colors[i]}">
-        <div class="milestone-label">Responses Target</div>
+        <div class="milestone-label">Leads Target</div>
         <div class="milestone-target" style="color:${accentColors[i]}">${target}</div>
         <div class="milestone-date" style="color:${accentColors[i]}">${fmtShort(dateNormal)}</div>
         <div class="milestone-sub">${fmtFull(dateNormal)} · in ${daysNormal} days</div>
@@ -821,10 +821,10 @@ function renderDashboard(rows) {
   });
 
   // ── Pipeline Health calcs ──
-  const responsesPerMeeting = Math.round(INSTANTLY.opportunities / INSTANTLY.meetings);
-  const responsesUntilNextMeeting = responsesPerMeeting - (total % responsesPerMeeting);
+  const leadsPerMeeting = Math.round(INSTANTLY.opportunities / INSTANTLY.meetings);
+  const leadsUntilNextMeeting = leadsPerMeeting - (total % leadsPerMeeting);
   const marchMeetings = Math.round(marchConservative * 0.05);
-  document.getElementById('health-next-meeting').textContent = '~' + responsesUntilNextMeeting;
+  document.getElementById('health-next-meeting').textContent = '~' + leadsUntilNextMeeting;
   document.getElementById('health-meetings-march').textContent = '~' + marchMeetings;
 
   // ── Feb Projection bars ──
@@ -839,7 +839,7 @@ function renderDashboard(rows) {
   document.getElementById('proj-pace-bar').style.width  = bpct(febProj) + '%';
   document.getElementById('proj-pace-bar').textContent  = `~${febProj}`;
   document.getElementById('proj-note').textContent =
-    `At ${febRate.toFixed(2)} resp/day × ${daysLeft} remaining days = ~${Math.round(febRate * daysLeft)} more · Projected total: ${febProj}`;
+    `At ${febRate.toFixed(2)} leads/day × ${daysLeft} remaining days = ~${Math.round(febRate * daysLeft)} more · Projected total: ${febProj}`;
 
   // ── Charts ──
   const chartCounts = MONTH_ORDER.map(m => byMonth[m]);
@@ -878,13 +878,13 @@ function initCharts() {
       labels: [],
       datasets: [
         {
-          label: 'Responses', data: [],
+          label: 'Leads', data: [],
           borderColor:'#4a90d9', backgroundColor:tGrad, borderWidth:3,
           pointBackgroundColor:'#fff', pointBorderColor:'#4a90d9', pointBorderWidth:2.5,
           pointRadius:6, pointHoverRadius:8, tension:0.35, fill:true,
         },
         {
-          label: 'Resp/Day (×25)', data: [],
+          label: 'Leads/Day (×25)', data: [],
           borderColor:'#2ecc71', borderWidth:2, borderDash:[6,4],
           pointBackgroundColor:'#2ecc71', pointBorderColor:'#2ecc71',
           pointRadius:4, pointHoverRadius:6, tension:0.35, fill:false,
@@ -902,7 +902,7 @@ function initCharts() {
           borderColor:'#333750', borderWidth:1,
           titleFont:{family:'DM Sans',weight:'600',size:13}, bodyFont:{family:'DM Sans',size:12},
           padding:12, cornerRadius:10, displayColors:true,
-          callbacks:{ label: ctx => ctx.datasetIndex===0 ? ` Responses: ${ctx.raw}` : ` Resp/Day: ${(ctx.raw/25).toFixed(2)}` }
+          callbacks:{ label: ctx => ctx.datasetIndex===0 ? ` Leads: ${ctx.raw}` : ` Leads/Day: ${(ctx.raw/25).toFixed(2)}` }
         }
       },
       scales:{
