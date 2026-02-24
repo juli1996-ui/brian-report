@@ -14,17 +14,19 @@
     --text: #ffffff;
     --text-muted: #a0a8b8;
     --accent: #4a90d9;
-    --accent-glow: rgba(74, 144, 217, 0.15);
+    --accent-glow: rgba(74,144,217,0.15);
     --green: #2ecc71;
-    --green-glow: rgba(46, 204, 113, 0.12);
+    --green-glow: rgba(46,204,113,0.12);
     --amber: #fbbf24;
-    --amber-glow: rgba(251, 191, 36, 0.12);
+    --amber-glow: rgba(251,191,36,0.12);
     --red: #f87171;
     --purple: #a78bfa;
-    --purple-glow: rgba(167, 139, 250, 0.12);
+    --purple-glow: rgba(167,139,250,0.12);
+    --teal: #2dd4bf;
+    --teal-glow: rgba(45,212,191,0.12);
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin:0; padding:0; box-sizing:border-box; }
 
   body {
     font-family: 'DM Sans', sans-serif;
@@ -34,7 +36,7 @@
     padding: 40px 20px;
   }
 
-  .container { max-width: 900px; margin: 0 auto; }
+  .container { max-width:960px; margin:0 auto; }
 
   /* ── Source Bar ── */
   .source-bar {
@@ -48,19 +50,9 @@
     margin-bottom: 36px;
     flex-wrap: wrap;
   }
-
-  .source-bar label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    white-space: nowrap;
-  }
-
+  .source-bar label { font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; white-space:nowrap; }
   .source-bar input {
-    flex: 1;
-    min-width: 200px;
+    flex: 1; min-width:200px;
     background: rgba(255,255,255,0.05);
     border: 1px solid var(--card-border);
     border-radius: 8px;
@@ -71,327 +63,214 @@
     outline: none;
     transition: border-color 0.2s;
   }
-
-  .source-bar input:focus {
-    border-color: var(--accent);
-    color: var(--text);
-  }
+  .source-bar input:focus { border-color:var(--accent); color:var(--text); }
 
   .btn-refresh {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
+    display: flex; align-items:center; gap:7px;
+    background: var(--accent); color:#fff;
+    border:none; border-radius:8px;
     padding: 9px 18px;
-    font-size: 13px;
-    font-weight: 600;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    white-space: nowrap;
+    font-size:13px; font-weight:600; font-family:'DM Sans',sans-serif;
+    cursor:pointer; transition:background 0.2s,transform 0.1s; white-space:nowrap;
   }
+  .btn-refresh:hover { background:#3a7bc8; }
+  .btn-refresh:active { transform:scale(0.97); }
+  .btn-refresh:disabled { background:#2a2d4a; color:var(--text-muted); cursor:not-allowed; }
+  .btn-refresh.spinning svg { animation:spin 1s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
 
-  .btn-refresh:hover { background: #3a7bc8; }
-  .btn-refresh:active { transform: scale(0.97); }
-  .btn-refresh:disabled { background: #2a2d4a; color: var(--text-muted); cursor: not-allowed; }
-
-  .btn-refresh svg { transition: transform 0.5s; }
-  .btn-refresh.spinning svg { animation: spin 1s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .status-dot.idle    { background: var(--text-muted); }
-  .status-dot.loading { background: var(--amber); animation: pulse 0.8s infinite; }
-  .status-dot.ok      { background: var(--green); }
-  .status-dot.err     { background: var(--red); }
-
+  .status-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .status-dot.idle    { background:var(--text-muted); }
+  .status-dot.loading { background:var(--amber); animation:pulse 0.8s infinite; }
+  .status-dot.ok      { background:var(--green); }
+  .status-dot.err     { background:var(--red); }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-  .status-text { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+  .status-text { font-size:11px; color:var(--text-muted); white-space:nowrap; }
 
   /* ── Error Banner ── */
   .error-banner {
-    display: none;
+    display:none;
     background: rgba(248,113,113,0.1);
     border: 1px solid rgba(248,113,113,0.3);
-    border-radius: 10px;
-    padding: 12px 18px;
-    font-size: 13px;
-    color: var(--red);
-    margin-bottom: 24px;
+    border-radius:10px; padding:12px 18px;
+    font-size:13px; color:var(--red); margin-bottom:24px;
   }
 
   /* ── Header ── */
-  .header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-
-  .header-label {
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent);
-    font-weight: 600;
-    margin-bottom: 12px;
-  }
-
-  .header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 32px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 8px;
-  }
-
-  .header-sub {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-bottom: 12px;
-  }
-
-  .header-sub span { color: var(--green); font-weight: 600; }
-
+  .header { text-align:center; margin-bottom:40px; }
+  .header-label { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:12px; }
+  .header h1 { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; color:#fff; margin-bottom:8px; }
+  .header-sub { font-size:14px; color:var(--text-muted); margin-bottom:12px; }
+  .header-sub span { color:var(--green); font-weight:600; }
   .sync-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(46, 204, 113, 0.08);
-    border: 1px solid rgba(46, 204, 113, 0.2);
-    border-radius: 20px;
-    padding: 4px 14px;
-    font-size: 11px;
-    color: var(--green);
-    font-weight: 600;
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(46,204,113,0.08); border:1px solid rgba(46,204,113,0.2);
+    border-radius:20px; padding:4px 14px;
+    font-size:11px; color:var(--green); font-weight:600;
   }
-
-  .sync-pulse {
-    width: 6px; height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
+  .sync-pulse { width:6px; height:6px; background:var(--green); border-radius:50%; animation:pulse 2s infinite; }
 
   /* ── KPI Cards ── */
-  .kpi-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
+  .kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
   .kpi {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 14px;
-    padding: 22px 18px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+    background:var(--card); border:1px solid var(--card-border);
+    border-radius:14px; padding:22px 18px; text-align:center;
+    position:relative; overflow:hidden;
   }
-
-  .kpi::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    opacity: 0.7;
-  }
-
-  .kpi.blue::before   { background: linear-gradient(90deg, var(--accent), #7bc3ff); }
-  .kpi.green::before  { background: linear-gradient(90deg, var(--green), #7fffc4); }
-  .kpi.amber::before  { background: linear-gradient(90deg, var(--amber), #ffe066); }
-  .kpi.purple::before { background: linear-gradient(90deg, var(--purple), #c4b5fd); }
-
-  .kpi-value {
-    font-family: 'Playfair Display', serif;
-    font-size: 36px;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1;
-    margin-bottom: 6px;
-    transition: all 0.3s;
-  }
-
-  .kpi-label {
-    font-size: 12px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 500;
-  }
-
-  .kpi-badge {
-    display: inline-block;
-    margin-top: 8px;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
-
-  .kpi-badge.green  { background: var(--green-glow);  color: var(--green); }
-  .kpi-badge.blue   { background: var(--accent-glow); color: var(--accent); }
-  .kpi-badge.amber  { background: var(--amber-glow);  color: var(--amber); }
-  .kpi-badge.purple { background: var(--purple-glow); color: var(--purple); }
+  .kpi::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; opacity:0.7; }
+  .kpi.blue::before   { background:linear-gradient(90deg,var(--accent),#7bc3ff); }
+  .kpi.green::before  { background:linear-gradient(90deg,var(--green),#7fffc4); }
+  .kpi.amber::before  { background:linear-gradient(90deg,var(--amber),#ffe066); }
+  .kpi.purple::before { background:linear-gradient(90deg,var(--purple),#c4b5fd); }
+  .kpi.teal::before   { background:linear-gradient(90deg,var(--teal),#99f6e4); }
+  .kpi-value { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; color:#fff; line-height:1; margin-bottom:6px; }
+  .kpi-label { font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; font-weight:500; }
+  .kpi-badge { display:inline-block; margin-top:8px; font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; }
+  .kpi-badge.green  { background:var(--green-glow);  color:var(--green); }
+  .kpi-badge.blue   { background:var(--accent-glow); color:var(--accent); }
+  .kpi-badge.amber  { background:var(--amber-glow);  color:var(--amber); }
+  .kpi-badge.purple { background:var(--purple-glow); color:var(--purple); }
+  .kpi-badge.teal   { background:var(--teal-glow);   color:var(--teal); }
 
   /* ── Sections ── */
-  .section {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 16px;
-    padding: 32px;
-    margin-bottom: 24px;
+  .section { background:var(--card); border:1px solid var(--card-border); border-radius:16px; padding:32px; margin-bottom:24px; }
+  .section-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; color:#fff; margin-bottom:6px; }
+  .section-sub { font-size:13px; color:var(--text-muted); margin-bottom:20px; }
+
+  .chart-container { position:relative; height:280px; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px; }
+  .two-col .section { margin-bottom:0; }
+  .three-col { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
+
+  /* ── Funnel ── */
+  .funnel { display:flex; align-items:stretch; gap:2px; height:90px; margin-bottom:20px; }
+  .funnel-step {
+    flex:1; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    border-radius:10px; padding:10px 8px;
+    position:relative; text-align:center;
+    transition:opacity 0.2s;
   }
+  .funnel-step:hover { opacity:0.85; }
+  .funnel-step.f1 { background:linear-gradient(135deg,rgba(74,144,217,0.3),rgba(74,144,217,0.15)); border:1px solid rgba(74,144,217,0.3); }
+  .funnel-step.f2 { background:linear-gradient(135deg,rgba(167,139,250,0.3),rgba(167,139,250,0.15)); border:1px solid rgba(167,139,250,0.3); }
+  .funnel-step.f3 { background:linear-gradient(135deg,rgba(46,204,113,0.3),rgba(46,204,113,0.15)); border:1px solid rgba(46,204,113,0.3); }
+  .funnel-step.f4 { background:linear-gradient(135deg,rgba(251,191,36,0.3),rgba(251,191,36,0.15)); border:1px solid rgba(251,191,36,0.3); }
+  .funnel-arrow { display:flex; align-items:center; color:var(--card-border); font-size:18px; flex-shrink:0; }
+  .funnel-num { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:#fff; line-height:1; }
+  .funnel-label { font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.8px; font-weight:600; margin-top:3px; }
+  .funnel-rate { font-size:11px; font-weight:700; margin-top:4px; }
+  .funnel-rate.blue   { color:var(--accent); }
+  .funnel-rate.purple { color:var(--purple); }
+  .funnel-rate.green  { color:var(--green); }
+  .funnel-rate.amber  { color:var(--amber); }
 
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 20px;
+  .campaign-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .campaign-pill {
+    display:flex; align-items:center; gap:10px;
+    background: rgba(255,255,255,0.04);
+    border:1px solid var(--card-border);
+    border-radius:10px; padding:10px 14px;
   }
+  .campaign-dot { width:8px; height:8px; border-radius:50%; background:var(--green); flex-shrink:0; }
+  .campaign-dot.new { background:var(--amber); animation:pulse 1.5s infinite; }
+  .campaign-name { font-size:12px; color:var(--text); font-weight:500; line-height:1.3; }
+  .campaign-meta { font-size:10px; color:var(--text-muted); margin-top:2px; }
 
-  .chart-container { position: relative; height: 280px; }
-
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-bottom: 24px;
-  }
-
-  .two-col .section { margin-bottom: 0; }
-
-  .donut-container { position: relative; height: 220px; }
-
-  .donut-legend {
-    margin-top: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .legend-count { margin-left: auto; font-weight: 600; color: var(--text); }
+  /* ── Donut ── */
+  .donut-container { position:relative; height:200px; }
+  .donut-legend { margin-top:16px; display:flex; flex-direction:column; gap:8px; }
+  .legend-item { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-muted); }
+  .legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .legend-count { margin-left:auto; font-weight:600; color:var(--text); }
 
   /* ── Table ── */
-  .table-wrap { overflow-x: auto; }
+  .table-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  thead th { text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:1.2px; color:var(--text-muted); font-weight:600; padding:10px 14px; border-bottom:1px solid var(--card-border); }
+  thead th:not(:first-child) { text-align:right; }
+  tbody td { padding:14px; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--text); }
+  tbody td:not(:first-child) { text-align:right; font-variant-numeric:tabular-nums; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr.highlight td { color:#fff; font-weight:600; }
+  .trend-up   { color:var(--green); font-weight:600; font-size:12px; }
+  .trend-down { color:var(--red);   font-weight:600; font-size:12px; }
+  .trend-flat { color:var(--amber); font-weight:600; font-size:12px; }
 
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-
-  thead th {
-    text-align: left;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    color: var(--text-muted);
-    font-weight: 600;
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--card-border);
+  /* ── Milestone Cards ── */
+  .milestone-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius:14px; padding:22px 20px;
+    text-align:center; position:relative; overflow:hidden;
   }
+  .milestone-card::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; opacity:0.7; }
+  .milestone-card.m300::before { background:linear-gradient(90deg,var(--accent),#7bc3ff); }
+  .milestone-card.m400::before { background:linear-gradient(90deg,var(--green),#7fffc4); }
+  .milestone-card.m500::before { background:linear-gradient(90deg,var(--purple),#c4b5fd); }
+  .milestone-target { font-family:'Playfair Display',serif; font-size:40px; font-weight:700; color:#fff; line-height:1; }
+  .milestone-label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-top:4px; }
+  .milestone-date { font-size:20px; font-weight:700; margin-top:12px; }
+  .milestone-sub { font-size:12px; color:var(--text-muted); margin-top:4px; }
+  .milestone-opt { font-size:11px; font-weight:600; margin-top:8px; padding:3px 10px; border-radius:20px; display:inline-block; }
 
-  thead th:not(:first-child) { text-align: right; }
-
-  tbody td {
-    padding: 14px;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    color: var(--text);
+  /* ── Scenario bars ── */
+  .scenario-row { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+  .scenario-label { font-size:13px; color:var(--text-muted); min-width:200px; flex-shrink:0; }
+  .scenario-bar-bg { flex:1; height:32px; background:rgba(255,255,255,0.04); border-radius:8px; overflow:hidden; }
+  .scenario-bar {
+    height:100%; border-radius:8px;
+    display:flex; align-items:center; justify-content:flex-end;
+    padding-right:12px; font-size:13px; font-weight:700; color:#fff;
+    transition:width 0.9s ease; min-width:50px;
   }
+  .scenario-bar.blue  { background:linear-gradient(90deg,rgba(74,144,217,0.3),var(--accent)); }
+  .scenario-bar.green { background:linear-gradient(90deg,rgba(46,204,113,0.3),var(--green)); }
+  .scenario-bar.amber { background:linear-gradient(90deg,rgba(251,191,36,0.3),var(--amber)); }
 
-  tbody td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr.highlight td { color: #fff; font-weight: 600; }
-
-  .trend-up   { color: var(--green); font-weight: 600; font-size: 12px; }
-  .trend-down { color: var(--red);   font-weight: 600; font-size: 12px; }
-  .trend-flat { color: var(--amber); font-weight: 600; font-size: 12px; }
-
-  /* ── Projection ── */
-  .proj-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 14px;
+  /* ── Health meters ── */
+  .health-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .health-card {
+    background:rgba(255,255,255,0.03); border:1px solid var(--card-border);
+    border-radius:12px; padding:18px 16px; text-align:center;
   }
+  .health-val { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:#fff; }
+  .health-label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-top:4px; }
+  .health-desc { font-size:11px; color:var(--text-muted); margin-top:6px; line-height:1.5; }
 
-  .proj-label {
-    font-size: 13px;
-    color: var(--text-muted);
-    min-width: 170px;
-    flex-shrink: 0;
+  /* ── Proj bar ── */
+  .proj-row { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+  .proj-label { font-size:13px; color:var(--text-muted); min-width:170px; flex-shrink:0; }
+  .proj-bar-bg { flex:1; height:28px; background:rgba(255,255,255,0.04); border-radius:8px; overflow:hidden; }
+  .proj-bar { height:100%; border-radius:8px; display:flex; align-items:center; justify-content:flex-end; padding-right:10px; font-size:12px; font-weight:700; color:#fff; transition:width 0.8s ease; min-width:40px; }
+  .proj-bar.blue  { background:linear-gradient(90deg,rgba(74,144,217,0.3),var(--accent)); }
+  .proj-bar.green { background:linear-gradient(90deg,rgba(46,204,113,0.3),var(--green)); }
+
+  /* ── Instantly badge ── */
+  .instantly-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.2);
+    border-radius:8px; padding:5px 12px; font-size:11px;
+    color:var(--amber); font-weight:600; margin-bottom:20px;
   }
-
-  .proj-bar-bg {
-    flex: 1;
-    height: 28px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .proj-bar {
-    height: 100%;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 10px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #fff;
-    transition: width 0.8s ease;
-    min-width: 40px;
-  }
-
-  .proj-bar.blue  { background: linear-gradient(90deg, rgba(74,144,217,0.3), var(--accent)); }
-  .proj-bar.green { background: linear-gradient(90deg, rgba(46,204,113,0.3), var(--green)); }
 
   /* ── Footer ── */
-  .footer {
-    text-align: center;
-    margin-top: 40px;
-    padding-top: 24px;
-    border-top: 1px solid var(--card-border);
-  }
+  .footer { text-align:center; margin-top:40px; padding-top:24px; border-top:1px solid var(--card-border); }
+  .footer-text { font-size:12px; color:var(--text-muted); margin-top:8px; }
 
-  .footer-text { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
-
-  /* ── Skeleton shimmer ── */
-  .skeleton {
-    background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 6px;
-    color: transparent !important;
-  }
-
-  @keyframes shimmer { to { background-position: -200% 0; } }
-
-  @media (max-width: 700px) {
-    .kpi-row    { grid-template-columns: repeat(2, 1fr); }
-    .kpi-value  { font-size: 28px; }
-    .header h1  { font-size: 24px; }
-    .section    { padding: 20px; }
-    .two-col    { grid-template-columns: 1fr; }
-    .proj-row   { flex-direction: column; align-items: stretch; }
-    .proj-label { min-width: unset; }
-    .source-bar { flex-direction: column; align-items: stretch; }
+  @media (max-width:700px) {
+    .kpi-row    { grid-template-columns:repeat(2,1fr); }
+    .kpi-value  { font-size:28px; }
+    .header h1  { font-size:24px; }
+    .section    { padding:20px; }
+    .two-col    { grid-template-columns:1fr; }
+    .three-col  { grid-template-columns:1fr; }
+    .campaign-grid { grid-template-columns:1fr; }
+    .health-grid { grid-template-columns:1fr; }
+    .funnel     { flex-direction:column; height:auto; gap:8px; }
+    .funnel-arrow { display:none; }
+    .scenario-label { min-width:130px; font-size:12px; }
+    .source-bar { flex-direction:column; align-items:stretch; }
   }
 </style>
 </head>
@@ -413,7 +292,6 @@
     <span class="status-text" id="status-text">Not loaded</span>
   </div>
 
-  <!-- Error Banner -->
   <div class="error-banner" id="error-banner"></div>
 
   <!-- Header -->
@@ -423,40 +301,123 @@
          style="height:56px;margin-bottom:24px;display:block;margin-left:auto;margin-right:auto;">
     <div class="header-label">Live Campaign Dashboard</div>
     <h1>Brian Rechtman</h1>
-    <div class="header-sub">August 2025 — February 2026 &nbsp;·&nbsp; <span id="header-total">— Total Responses</span></div>
+    <div class="header-sub">August 2025 — Present &nbsp;·&nbsp; <span id="header-total">— Total Responses</span></div>
     <div class="sync-badge">
       <span class="sync-pulse"></span>
       Last synced: <span id="sync-time">—</span>
     </div>
   </div>
 
-  <!-- KPI Cards -->
+  <!-- KPI Row -->
   <div class="kpi-row">
     <div class="kpi blue">
       <div class="kpi-value" id="kpi-total">—</div>
       <div class="kpi-label">Total Responses</div>
-      <div class="kpi-badge blue">7 months</div>
+      <div class="kpi-badge blue">All campaigns</div>
     </div>
     <div class="kpi green">
-      <div class="kpi-value" id="kpi-feb-rate">—</div>
-      <div class="kpi-label">Feb Resp / Day</div>
-      <div class="kpi-badge green" id="kpi-feb-badge">Current month</div>
+      <div class="kpi-value" id="kpi-rate">—</div>
+      <div class="kpi-label">Resp / Day</div>
+      <div class="kpi-badge green" id="kpi-rate-badge">Current pace</div>
     </div>
     <div class="kpi amber">
-      <div class="kpi-value" id="kpi-meetings">—</div>
+      <div class="kpi-value">12</div>
       <div class="kpi-label">Meeting Requests</div>
       <div class="kpi-badge amber">High intent</div>
     </div>
     <div class="kpi purple">
-      <div class="kpi-value" id="kpi-forwarded">—</div>
-      <div class="kpi-label">Forwarded Internally</div>
-      <div class="kpi-badge purple">Warm leads</div>
+      <div class="kpi-value" id="kpi-projected">—</div>
+      <div class="kpi-label">March Forecast</div>
+      <div class="kpi-badge purple" id="kpi-projected-badge">At current pace</div>
     </div>
   </div>
 
-  <!-- Trend Chart -->
+  <!-- ═══════════════════════════════════════════
+       CAMPAIGN FUNNEL + ACTIVE CAMPAIGNS
+  ════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="instantly-badge">
+      ⚡ Instantly data · Synced Feb 24, 2026 via BridgeKit
+    </div>
+    <div class="section-title">Campaign Funnel Performance</div>
+    <div class="section-sub">116,252 emails sent across 5 active campaigns — full-funnel conversion breakdown</div>
+
+    <div class="funnel">
+      <div class="funnel-step f1">
+        <div class="funnel-num">116,252</div>
+        <div class="funnel-label">Emails Sent</div>
+        <div class="funnel-rate blue">100%</div>
+      </div>
+      <div class="funnel-arrow">›</div>
+      <div class="funnel-step f2">
+        <div class="funnel-num">877</div>
+        <div class="funnel-label">Total Replies</div>
+        <div class="funnel-rate purple">0.75%</div>
+      </div>
+      <div class="funnel-arrow">›</div>
+      <div class="funnel-step f3">
+        <div class="funnel-num" id="funnel-opps">239</div>
+        <div class="funnel-label">Opportunities</div>
+        <div class="funnel-rate green">27.4% of replies</div>
+      </div>
+      <div class="funnel-arrow">›</div>
+      <div class="funnel-step f4">
+        <div class="funnel-num">12</div>
+        <div class="funnel-label">Meetings</div>
+        <div class="funnel-rate amber">5% of opps</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:4px;margin-bottom:28px;">
+      <div style="font-size:12px;color:var(--text-muted);">📧 <strong style="color:var(--text);">484 emails</strong> per opportunity</div>
+      <div style="font-size:12px;color:var(--text-muted);">📅 <strong style="color:var(--text);">1 meeting</strong> every ~20 responses</div>
+      <div style="font-size:12px;color:var(--text-muted);">📈 <strong style="color:var(--green);">Reply → Opp rate: 27.4%</strong> — strong qualifier</div>
+    </div>
+
+    <div style="font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Active Campaigns</div>
+    <div class="campaign-grid">
+      <div class="campaign-pill">
+        <div class="campaign-dot"></div>
+        <div>
+          <div class="campaign-name">K-12 & Higher-Ed School Executives</div>
+          <div class="campaign-meta">Launched Aug 2025 · 3-step · 12 variants</div>
+        </div>
+      </div>
+      <div class="campaign-pill">
+        <div class="campaign-dot"></div>
+        <div>
+          <div class="campaign-name">Scraped Charities</div>
+          <div class="campaign-meta">Launched Sep 2025 · 3-step · 12 variants</div>
+        </div>
+      </div>
+      <div class="campaign-pill">
+        <div class="campaign-dot"></div>
+        <div>
+          <div class="campaign-name">BlueTree Retargeting Campaign</div>
+          <div class="campaign-meta">Launched Sep 2025 · 3-step · 12 variants</div>
+        </div>
+      </div>
+      <div class="campaign-pill">
+        <div class="campaign-dot"></div>
+        <div>
+          <div class="campaign-name">New Cold Email List (Client Provided)</div>
+          <div class="campaign-meta">Launched Dec 2025 · 3-step · 12 variants</div>
+        </div>
+      </div>
+      <div class="campaign-pill" style="border-color:rgba(251,191,36,0.3);background:rgba(251,191,36,0.06);">
+        <div class="campaign-dot new"></div>
+        <div>
+          <div class="campaign-name" style="color:var(--amber);">Custom Search Query ✦ NEW</div>
+          <div class="campaign-meta">Launched Feb 20, 2026 · 1-step · 3 variants · Ramping up</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Response Trend -->
   <div class="section">
     <div class="section-title">Response Trend</div>
+    <div class="section-sub">Monthly responses vs. daily pace — showing campaign momentum over time</div>
     <div class="chart-container">
       <canvas id="trendChart"></canvas>
     </div>
@@ -466,50 +427,120 @@
   <div class="two-col">
     <div class="section">
       <div class="section-title">Monthly Breakdown</div>
+      <div class="section-sub">Responses and daily pace by month</div>
       <div class="table-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Resp</th>
-              <th>/ Day</th>
-              <th>vs Prev</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Month</th><th>Resp</th><th>/Day</th><th>vs Prev</th></tr></thead>
           <tbody id="monthly-tbody">
-            <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:24px;">Hit Refresh to load data</td></tr>
+            <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:24px;">Hit Refresh to load</td></tr>
           </tbody>
         </table>
       </div>
-      <div style="margin-top:12px;font-size:11px;color:var(--text-muted);" id="feb-note">* Current month — days elapsed</div>
+      <div style="margin-top:12px;font-size:11px;color:var(--text-muted);" id="feb-note">* Current month</div>
     </div>
-
     <div class="section">
       <div class="section-title">Response Types</div>
+      <div class="section-sub">How leads are responding to outreach</div>
       <div class="donut-container">
         <canvas id="typeChart"></canvas>
       </div>
       <div class="donut-legend">
-        <div class="legend-item">
-          <div class="legend-dot" style="background:#4a90d9;"></div>
-          Interested / More Info
-          <span class="legend-count" id="legend-interested">—</span>
+        <div class="legend-item"><div class="legend-dot" style="background:#4a90d9;"></div>Interested / More Info<span class="legend-count" id="legend-interested">—</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#a0a8b8;"></div>Other<span class="legend-count" id="legend-other">—</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#a78bfa;"></div>Forwarded Internally<span class="legend-count" id="legend-forwarded">—</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fbbf24;"></div>Meeting Request<span class="legend-count" id="legend-meetings">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PREDICTIVE: MARCH FORECAST
+  ════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">March 2026 Forecast</div>
+    <div class="section-sub" id="march-sub">If current pace holds, here's what March looks like across 3 scenarios</div>
+
+    <div id="march-scenarios" style="margin-bottom:24px;">
+      <div class="scenario-row">
+        <div class="scenario-label" style="color:var(--text-muted);">Conservative (current pace)</div>
+        <div class="scenario-bar-bg">
+          <div class="scenario-bar blue" id="bar-conservative" style="width:0%;">—</div>
         </div>
-        <div class="legend-item">
-          <div class="legend-dot" style="background:#a0a8b8;"></div>
-          Other
-          <span class="legend-count" id="legend-other">—</span>
+      </div>
+      <div class="scenario-row">
+        <div class="scenario-label" style="color:var(--green);font-weight:600;">Baseline (Jan–Feb avg)</div>
+        <div class="scenario-bar-bg">
+          <div class="scenario-bar green" id="bar-baseline" style="width:0%;">—</div>
         </div>
-        <div class="legend-item">
-          <div class="legend-dot" style="background:#a78bfa;"></div>
-          Forwarded Internally
-          <span class="legend-count" id="legend-forwarded">—</span>
+      </div>
+      <div class="scenario-row">
+        <div class="scenario-label" style="color:var(--amber);font-weight:600;">Optimistic (new campaign ramps)</div>
+        <div class="scenario-bar-bg">
+          <div class="scenario-bar amber" id="bar-optimistic" style="width:0%;">—</div>
         </div>
-        <div class="legend-item">
-          <div class="legend-dot" style="background:#fbbf24;"></div>
-          Meeting Request
-          <span class="legend-count" id="legend-meetings">—</span>
-        </div>
+      </div>
+    </div>
+
+    <div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:10px;padding:14px 18px;font-size:13px;line-height:1.7;">
+      <strong style="color:var(--amber);">✦ Custom Search Query campaign effect</strong><br>
+      <span style="color:var(--text-muted);" id="new-campaign-note">Launched Feb 20, this campaign is only days old and hasn't fully contributed to the response count yet. As it ramps up through March, it has the potential to push responses well above the baseline — making the optimistic scenario the most likely if engagement holds.</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PREDICTIVE: MILESTONE TRACKER
+  ════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Response Milestones</div>
+    <div class="section-sub" id="milestone-sub">At current pace — when will we hit the next targets?</div>
+
+    <div class="three-col" id="milestone-cards">
+      <!-- Filled dynamically -->
+    </div>
+
+    <div style="font-size:12px;color:var(--text-muted);margin-top:4px;" id="milestone-note">* Optimistic dates assume new campaign ramps to ~2.5 resp/day in March</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PIPELINE HEALTH
+  ════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="instantly-badge">
+      ⚡ Instantly data · Synced Feb 24, 2026 via BridgeKit
+    </div>
+    <div class="section-title">Pipeline Health</div>
+    <div class="section-sub">Key conversion metrics across the full outreach funnel</div>
+
+    <div class="health-grid">
+      <div class="health-card">
+        <div class="health-val" style="color:var(--purple);">0.75%</div>
+        <div class="health-label">Reply Rate</div>
+        <div class="health-desc">877 replies from 116,252 emails sent. Industry benchmark: 0.5–1%</div>
+      </div>
+      <div class="health-card">
+        <div class="health-val" style="color:var(--green);">27.4%</div>
+        <div class="health-label">Reply → Opportunity</div>
+        <div class="health-desc">Nearly 1 in 3 replies becomes a qualified opportunity — strong signal quality</div>
+      </div>
+      <div class="health-card">
+        <div class="health-val" style="color:var(--amber);">5.0%</div>
+        <div class="health-label">Opp → Meeting</div>
+        <div class="health-desc">12 meeting requests from 239 opportunities. Every 20 responses generates a meeting</div>
+      </div>
+      <div class="health-card">
+        <div class="health-val" id="health-next-meeting" style="color:var(--accent);">—</div>
+        <div class="health-label">Responses to Next Meeting</div>
+        <div class="health-desc">Estimated responses needed until the next meeting request at 5% conversion rate</div>
+      </div>
+      <div class="health-card">
+        <div class="health-val" style="color:var(--teal);">484</div>
+        <div class="health-label">Emails / Opportunity</div>
+        <div class="health-desc">Cost to generate 1 qualified response. Use this to plan list size for target outcomes</div>
+      </div>
+      <div class="health-card">
+        <div class="health-val" id="health-meetings-march" style="color:var(--green);">—</div>
+        <div class="health-label">Projected March Meetings</div>
+        <div class="health-desc">Estimated new meeting requests in March based on forecasted responses × 5%</div>
       </div>
     </div>
   </div>
@@ -517,24 +548,19 @@
   <!-- February Projection -->
   <div class="section">
     <div class="section-title" id="proj-title">February Projection</div>
+    <div class="section-sub">How February is tracking vs January</div>
     <div style="margin-bottom:20px;">
       <div class="proj-row">
         <div class="proj-label">January (actual)</div>
-        <div class="proj-bar-bg">
-          <div class="proj-bar blue" id="proj-jan-bar" style="width:0%;">—</div>
-        </div>
+        <div class="proj-bar-bg"><div class="proj-bar blue" id="proj-jan-bar" style="width:0%;">—</div></div>
       </div>
       <div class="proj-row">
         <div class="proj-label">Feb — so far</div>
-        <div class="proj-bar-bg">
-          <div class="proj-bar blue" id="proj-sofar-bar" style="width:0%;">—</div>
-        </div>
+        <div class="proj-bar-bg"><div class="proj-bar blue" id="proj-sofar-bar" style="width:0%;">—</div></div>
       </div>
       <div class="proj-row">
         <div class="proj-label" style="color:var(--green);font-weight:600;">Feb — at current pace</div>
-        <div class="proj-bar-bg">
-          <div class="proj-bar green" id="proj-pace-bar" style="width:0%;">—</div>
-        </div>
+        <div class="proj-bar-bg"><div class="proj-bar green" id="proj-pace-bar" style="width:0%;">—</div></div>
       </div>
     </div>
     <div style="font-size:12px;color:var(--text-muted);" id="proj-note">—</div>
@@ -545,13 +571,13 @@
     <img src="https://images.squarespace-cdn.com/content/v1/658518476ae2bb7cbb022dd8/5921253f-9867-4a80-af42-766a71729436/BLUE+TREE+MARKETING+Logo_white_transparent+background.png?format=1500w"
          alt="BlueTree Marketing"
          style="height:36px;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;opacity:0.85;">
-    <div class="footer-text" id="footer-sync">Paste a Google Sheets URL above and click Refresh to load live data.</div>
+    <div class="footer-text" id="footer-sync">Google Sheets data: live · Instantly data: synced Feb 24, 2026 via BridgeKit</div>
   </div>
 
 </div>
 <script>
 // ─────────────────────────────────────────────────────────
-//  Config
+//  Config & Constants
 // ─────────────────────────────────────────────────────────
 const DEFAULT_URL = 'https://docs.google.com/spreadsheets/d/1v4QHwimjnpG999JXXq1AYIcViUOZ-0TDzCeqz2b7ONM/edit?gid=1206033729#gid=1206033729';
 const LS_KEY = 'btm_sheet_url';
@@ -560,8 +586,16 @@ const MONTH_ORDER  = ['Agosto','Septiembre','Octubre','Noviembre','Diciembre','E
 const MONTH_LABELS = { Agosto:'Aug', Septiembre:'Sep', Octubre:'Oct', Noviembre:'Nov', Diciembre:'Dec', Enero:'Jan', Febrero:'Feb' };
 const MONTH_DAYS   = { Agosto:31, Septiembre:30, Octubre:31, Noviembre:30, Diciembre:31, Enero:31, Febrero:28 };
 
-let trendChart = null;
-let typeChart  = null;
+// Instantly data — BridgeKit pull Feb 24, 2026
+const INSTANTLY = {
+  emailsSent: 116252,
+  replies: 877,
+  opportunities: 239,
+  meetings: 12,
+  campaigns: 5
+};
+
+let trendChart = null, typeChart = null;
 
 // ─────────────────────────────────────────────────────────
 //  Init
@@ -574,64 +608,45 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ─────────────────────────────────────────────────────────
-//  UI helpers
+//  UI
 // ─────────────────────────────────────────────────────────
 function setStatus(state, msg) {
-  const dot  = document.getElementById('status-dot');
-  const text = document.getElementById('status-text');
-  const btn  = document.getElementById('btn-refresh');
-  const err  = document.getElementById('error-banner');
-
+  const dot = document.getElementById('status-dot');
+  const txt = document.getElementById('status-text');
+  const btn = document.getElementById('btn-refresh');
+  const err = document.getElementById('error-banner');
   dot.className = 'status-dot ' + state;
   err.style.display = 'none';
-
   if (state === 'loading') {
-    text.textContent = 'Fetching data…';
-    btn.disabled = true;
-    btn.classList.add('spinning');
+    txt.textContent = 'Fetching data…'; btn.disabled = true; btn.classList.add('spinning');
   } else if (state === 'ok') {
-    text.textContent = msg || 'Up to date';
-    btn.disabled = false;
-    btn.classList.remove('spinning');
+    txt.textContent = msg || 'Up to date'; btn.disabled = false; btn.classList.remove('spinning');
   } else if (state === 'err') {
-    text.textContent = 'Failed';
-    btn.disabled = false;
-    btn.classList.remove('spinning');
+    txt.textContent = 'Failed'; btn.disabled = false; btn.classList.remove('spinning');
     err.style.display = 'block';
-    err.innerHTML = `<strong>Could not load data:</strong> ${msg}<br><br>
-      Make sure the Google Sheet is set to <strong>Share → Anyone with the link → Viewer</strong>.`;
+    err.innerHTML = `<strong>Could not load data:</strong> ${msg}<br><br>Make sure the sheet is set to <strong>Share → Anyone with the link → Viewer</strong>.`;
   } else {
-    text.textContent = 'Not loaded';
-    btn.disabled = false;
-    btn.classList.remove('spinning');
+    txt.textContent = 'Not loaded'; btn.disabled = false; btn.classList.remove('spinning');
   }
 }
 
-// ─────────────────────────────────────────────────────────
-//  Refresh handler
-// ─────────────────────────────────────────────────────────
 function handleRefresh() {
   const url = document.getElementById('sheet-url').value.trim();
-  if (!url) return;
-  fetchAndRender(url);
+  if (url) fetchAndRender(url);
 }
 
 // ─────────────────────────────────────────────────────────
-//  Fetch + parse
+//  Fetch
 // ─────────────────────────────────────────────────────────
 async function fetchAndRender(url) {
   setStatus('loading');
   try {
     const { id, gid } = parseSheetUrl(url);
     if (!id) throw new Error('Could not find a spreadsheet ID in that URL.');
-
     const csvUrl = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&gid=${gid}&t=${Date.now()}`;
     const resp = await fetch(csvUrl, { cache: 'no-store' });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-
-    const csv  = await resp.text();
-    const rows = parseCSV(csv);
-
+    const rows = parseCSV(await resp.text());
     renderDashboard(rows);
     localStorage.setItem(LS_KEY, url);
     setStatus('ok', 'Up to date');
@@ -641,7 +656,7 @@ async function fetchAndRender(url) {
 }
 
 function parseSheetUrl(url) {
-  const idM  = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+  const idM = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
   const gidM = url.match(/[#?&]gid=(\d+)/);
   return { id: idM ? idM[1] : null, gid: gidM ? gidM[1] : '0' };
 }
@@ -650,13 +665,10 @@ function parseCSV(csv) {
   const lines = csv.split('\n');
   if (lines.length < 2) return [];
   const headers = splitLine(lines[0]);
-  return lines.slice(1)
-    .filter(l => l.trim())
-    .map(l => {
-      const vals = splitLine(l);
-      return headers.reduce((o, h, i) => ({ ...o, [h.trim()]: (vals[i] || '').trim() }), {});
-    })
-    .filter(r => r['Month'] && r['Month'].length > 0);
+  return lines.slice(1).filter(l => l.trim()).map(l => {
+    const vals = splitLine(l);
+    return headers.reduce((o, h, i) => ({ ...o, [h.trim()]: (vals[i] || '').trim() }), {});
+  }).filter(r => r['Month'] && r['Month'].length > 0);
 }
 
 function splitLine(line) {
@@ -675,7 +687,7 @@ function splitLine(line) {
 //  Render
 // ─────────────────────────────────────────────────────────
 function renderDashboard(rows) {
-  // ── Count by month ──
+  // Count by month
   const byMonth = {};
   MONTH_ORDER.forEach(m => byMonth[m] = 0);
   let meetings = 0, forwarded = 0, interested = 0, other = 0;
@@ -692,54 +704,52 @@ function renderDashboard(rows) {
 
   const total = rows.length;
 
-  // ── Feb elapsed days (from latest date in data) ──
+  // Feb elapsed days from latest date
   const febRows = rows.filter(r => r['Month'] === 'Febrero');
   let febDays = 28;
   if (febRows.length > 0) {
-    const valid = febRows
-      .map(r => r['Response Date'])
-      .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d))
-      .map(d => new Date(d));
-    if (valid.length > 0)
-      febDays = new Date(Math.max(...valid)).getDate();
+    const valid = febRows.map(r => r['Response Date']).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)).map(d => new Date(d));
+    if (valid.length > 0) febDays = new Date(Math.max(...valid)).getDate();
   }
 
-  const febCount     = byMonth['Febrero'];
-  const janCount     = byMonth['Enero'];
-  const febRate      = +(febCount / febDays).toFixed(2);
-  const daysLeft     = 28 - febDays;
-  const febProjected = Math.round(febCount + febRate * daysLeft);
-  const maxBar       = Math.max(janCount, febProjected, 70);
+  const febCount  = byMonth['Febrero'];
+  const janCount  = byMonth['Enero'];
+  const febRate   = +(febCount / febDays).toFixed(2);
+  const daysLeft  = 28 - febDays;
+  const febProj   = Math.round(febCount + febRate * daysLeft);
+
+  // March scenarios
+  const marchConservative = Math.round(febRate * 31);
+  const marchBaseline     = Math.round((janCount + febProj) / 2);
+  const marchOptimistic   = Math.round(marchConservative * 1.35); // ~35% boost from new campaign
 
   // ── KPIs ──
   document.getElementById('kpi-total').textContent     = total;
-  document.getElementById('kpi-feb-rate').textContent  = febRate.toFixed(2);
-  document.getElementById('kpi-meetings').textContent  = meetings;
-  document.getElementById('kpi-forwarded').textContent = forwarded;
+  document.getElementById('kpi-rate').textContent      = febRate.toFixed(2);
+  document.getElementById('kpi-rate-badge').textContent = febRate > 1.81 ? 'Best pace yet ↑' : 'Current pace';
+  document.getElementById('kpi-projected').textContent = marchConservative + '–' + marchOptimistic;
+  document.getElementById('header-total').textContent  = `${total} Total Responses`;
 
-  document.getElementById('header-total').textContent = `${total} Total Responses`;
-  document.getElementById('kpi-feb-badge').textContent =
-    febRate > 1.81 ? 'Best pace yet' : 'Current month';
+  // Funnel opportunities (live from sheet)
+  document.getElementById('funnel-opps').textContent = total;
 
   // ── Sync time ──
   const now = new Date();
-  document.getElementById('sync-time').textContent = now.toLocaleString('en-US',
-    { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' });
-  document.getElementById('footer-sync').textContent =
-    `Data synced from Google Sheets · ${now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})} · ${total} responses`;
+  const fmtDate = d => d.toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  document.getElementById('sync-time').textContent = fmtDate(now);
+  document.getElementById('footer-sync').textContent = `Google Sheets: live · Instantly: synced Feb 24, 2026 via BridgeKit · ${total} total responses`;
 
   // ── Monthly table ──
   const tbody = document.getElementById('monthly-tbody');
   tbody.innerHTML = '';
   let prev = null;
   MONTH_ORDER.forEach(m => {
-    const count   = byMonth[m];
-    const days    = m === 'Febrero' ? febDays : MONTH_DAYS[m];
-    const rate    = (count / days).toFixed(2);
-    const isCurr  = m === 'Febrero';
+    const count  = byMonth[m];
+    const days   = m === 'Febrero' ? febDays : MONTH_DAYS[m];
+    const rate   = (count / days).toFixed(2);
+    const isCurr = m === 'Febrero';
     const isRecent = m === 'Enero' || m === 'Febrero';
-    const label   = MONTH_LABELS[m] + (isCurr ? ' *' : '');
-
+    const label  = MONTH_LABELS[m] + (isCurr ? ' *' : '');
     let trendHtml = '<span style="color:var(--text-muted)">—</span>';
     if (prev !== null && prev > 0) {
       const pct = Math.round((count - prev) / prev * 100);
@@ -748,56 +758,105 @@ function renderDashboard(rows) {
       else                   trendHtml = `<span class="trend-flat">0%</span>`;
     }
     prev = count;
-
-    tbody.innerHTML += `
-      <tr${isRecent ? ' class="highlight"' : ''}>
-        <td>${label}</td><td>${count}</td><td>${rate}</td><td>${trendHtml}</td>
-      </tr>`;
+    tbody.innerHTML += `<tr${isRecent?' class="highlight"':''}>
+      <td>${label}</td><td>${count}</td><td>${rate}</td><td>${trendHtml}</td></tr>`;
   });
 
   if (daysLeft > 0) {
-    tbody.innerHTML += `
-      <tr style="background:rgba(46,204,113,0.06);">
-        <td style="color:var(--green);font-style:italic;">Feb projected</td>
-        <td style="color:var(--green);font-style:italic;">${febProjected}</td>
-        <td style="color:var(--green);font-style:italic;">${febRate.toFixed(2)}+</td>
-        <td style="color:var(--green);font-style:italic;">—</td>
-      </tr>`;
+    tbody.innerHTML += `<tr style="background:rgba(46,204,113,0.06);">
+      <td style="color:var(--green);font-style:italic;">Feb projected</td>
+      <td style="color:var(--green);font-style:italic;">${febProj}</td>
+      <td style="color:var(--green);font-style:italic;">${febRate.toFixed(2)}+</td>
+      <td style="color:var(--green);font-style:italic;">—</td></tr>`;
   }
 
   document.getElementById('feb-note').textContent =
     daysLeft > 0 ? `* Through day ${febDays} of 28 · ${daysLeft} days remaining` : '* Full month complete';
 
-  // ── Projection bars ──
-  const pct = v => Math.min(98, Math.round((v / maxBar) * 100));
+  // ── March Forecast bars ──
+  const marchMax = marchOptimistic * 1.1;
+  const pct = v => Math.min(97, Math.round(v / marchMax * 100));
+  document.getElementById('march-sub').textContent =
+    `At ${febRate.toFixed(2)} resp/day — here's what March looks like across 3 scenarios`;
+  document.getElementById('bar-conservative').style.width = pct(marchConservative) + '%';
+  document.getElementById('bar-conservative').textContent = marchConservative + ' responses';
+  document.getElementById('bar-baseline').style.width     = pct(marchBaseline) + '%';
+  document.getElementById('bar-baseline').textContent     = marchBaseline + ' responses';
+  document.getElementById('bar-optimistic').style.width   = '97%';
+  document.getElementById('bar-optimistic').textContent   = marchOptimistic + '+ responses';
+
+  // ── Milestone Tracker ──
+  const today = new Date();
+  const milestones = [300, 400, 500];
+  const colors = ['m300','m400','m500'];
+  const accentColors = ['var(--accent)','var(--green)','var(--purple)'];
+  const optPace = 2.5; // optimistic pace with new campaign
+
+  document.getElementById('milestone-sub').textContent =
+    `Starting from ${total} responses — at ${febRate.toFixed(2)} resp/day current pace`;
+
+  const cards = document.getElementById('milestone-cards');
+  cards.innerHTML = '';
+
+  milestones.forEach((target, i) => {
+    if (target <= total) return;
+    const daysNormal   = Math.ceil((target - total) / febRate);
+    const daysOpt      = Math.ceil((target - total) / optPace);
+    const dateNormal   = new Date(today); dateNormal.setDate(today.getDate() + daysNormal);
+    const dateOpt      = new Date(today); dateOpt.setDate(today.getDate() + daysOpt);
+    const fmtShort     = d => d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+    const fmtFull      = d => d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    const diff = daysNormal - daysOpt;
+
+    cards.innerHTML += `
+      <div class="milestone-card ${colors[i]}">
+        <div class="milestone-label">Responses Target</div>
+        <div class="milestone-target" style="color:${accentColors[i]}">${target}</div>
+        <div class="milestone-date" style="color:${accentColors[i]}">${fmtShort(dateNormal)}</div>
+        <div class="milestone-sub">${fmtFull(dateNormal)} · in ${daysNormal} days</div>
+        <div class="milestone-opt" style="background:rgba(251,191,36,0.1);color:var(--amber);">
+          ✦ Optimistic: ${fmtShort(dateOpt)} (${diff} days sooner)
+        </div>
+      </div>`;
+  });
+
+  // ── Pipeline Health calcs ──
+  const responsesPerMeeting = Math.round(INSTANTLY.opportunities / INSTANTLY.meetings);
+  const responsesUntilNextMeeting = responsesPerMeeting - (total % responsesPerMeeting);
+  const marchMeetings = Math.round(marchConservative * 0.05);
+  document.getElementById('health-next-meeting').textContent = '~' + responsesUntilNextMeeting;
+  document.getElementById('health-meetings-march').textContent = '~' + marchMeetings;
+
+  // ── Feb Projection bars ──
+  const maxBar = Math.max(janCount, febProj, 70);
+  const bpct = v => Math.min(97, Math.round(v / maxBar * 100));
   document.getElementById('proj-title').textContent =
     `February Projection (${daysLeft} day${daysLeft !== 1 ? 's' : ''} remaining)`;
-  document.getElementById('proj-jan-bar').style.width   = pct(janCount) + '%';
+  document.getElementById('proj-jan-bar').style.width   = bpct(janCount) + '%';
   document.getElementById('proj-jan-bar').textContent   = janCount;
-  document.getElementById('proj-sofar-bar').style.width = pct(febCount) + '%';
+  document.getElementById('proj-sofar-bar').style.width = bpct(febCount) + '%';
   document.getElementById('proj-sofar-bar').textContent = febCount;
-  document.getElementById('proj-pace-bar').style.width  = pct(febProjected) + '%';
-  document.getElementById('proj-pace-bar').textContent  = `~${febProjected}`;
-  document.getElementById('proj-note').textContent      =
-    `At ${febRate.toFixed(2)} resp/day × ${daysLeft} remaining days = ~${Math.round(febRate * daysLeft)} more · Projected total: ${febProjected}`;
+  document.getElementById('proj-pace-bar').style.width  = bpct(febProj) + '%';
+  document.getElementById('proj-pace-bar').textContent  = `~${febProj}`;
+  document.getElementById('proj-note').textContent =
+    `At ${febRate.toFixed(2)} resp/day × ${daysLeft} remaining days = ~${Math.round(febRate * daysLeft)} more · Projected total: ${febProj}`;
 
-  // ── Update charts ──
+  // ── Charts ──
   const chartCounts = MONTH_ORDER.map(m => byMonth[m]);
   const chartRates  = MONTH_ORDER.map(m => {
-    const days = m === 'Febrero' ? febDays : MONTH_DAYS[m];
-    return +(byMonth[m] / days * 25).toFixed(2);
+    const d = m === 'Febrero' ? febDays : MONTH_DAYS[m];
+    return +(byMonth[m] / d * 25).toFixed(2);
   });
   const chartLabels = MONTH_ORDER.map(m => MONTH_LABELS[m] + (m === 'Febrero' ? ' *' : ''));
 
-  trendChart.data.labels                   = chartLabels;
-  trendChart.data.datasets[0].data         = chartCounts;
-  trendChart.data.datasets[1].data         = chartRates;
+  trendChart.data.labels             = chartLabels;
+  trendChart.data.datasets[0].data   = chartCounts;
+  trendChart.data.datasets[1].data   = chartRates;
   trendChart.update();
 
   typeChart.data.datasets[0].data = [interested, other, forwarded, meetings];
   typeChart.update();
 
-  // ── Legend counts ──
   document.getElementById('legend-interested').textContent = interested;
   document.getElementById('legend-other').textContent      = other;
   document.getElementById('legend-forwarded').textContent  = forwarded;
@@ -805,10 +864,9 @@ function renderDashboard(rows) {
 }
 
 // ─────────────────────────────────────────────────────────
-//  Chart init (empty, filled on first render)
+//  Chart init
 // ─────────────────────────────────────────────────────────
 function initCharts() {
-  // Trend
   const tCtx = document.getElementById('trendChart').getContext('2d');
   const tGrad = tCtx.createLinearGradient(0, 0, 0, 280);
   tGrad.addColorStop(0, 'rgba(74,144,217,0.25)');
@@ -820,92 +878,57 @@ function initCharts() {
       labels: [],
       datasets: [
         {
-          label: 'Responses',
-          data: [],
-          borderColor: '#4a90d9',
-          backgroundColor: tGrad,
-          borderWidth: 3,
-          pointBackgroundColor: '#fff',
-          pointBorderColor: '#4a90d9',
-          pointBorderWidth: 2.5,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          tension: 0.35,
-          fill: true,
+          label: 'Responses', data: [],
+          borderColor:'#4a90d9', backgroundColor:tGrad, borderWidth:3,
+          pointBackgroundColor:'#fff', pointBorderColor:'#4a90d9', pointBorderWidth:2.5,
+          pointRadius:6, pointHoverRadius:8, tension:0.35, fill:true,
         },
         {
-          label: 'Resp/Day (×25)',
-          data: [],
-          borderColor: '#2ecc71',
-          borderWidth: 2,
-          borderDash: [6,4],
-          pointBackgroundColor: '#2ecc71',
-          pointBorderColor: '#2ecc71',
-          pointRadius: 4,
-          pointHoverRadius: 6,
-          tension: 0.35,
-          fill: false,
+          label: 'Resp/Day (×25)', data: [],
+          borderColor:'#2ecc71', borderWidth:2, borderDash:[6,4],
+          pointBackgroundColor:'#2ecc71', pointBorderColor:'#2ecc71',
+          pointRadius:4, pointHoverRadius:6, tension:0.35, fill:false,
         }
       ]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { intersect: false, mode: 'index' },
-      plugins: {
-        legend: {
-          display: true, position: 'top', align: 'end',
-          labels: { color:'#a0a8b8', font:{family:'DM Sans',size:11}, boxWidth:20, padding:16, usePointStyle:true, pointStyle:'line' }
-        },
-        tooltip: {
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ intersect:false, mode:'index' },
+      plugins:{
+        legend:{ display:true, position:'top', align:'end',
+          labels:{ color:'#a0a8b8', font:{family:'DM Sans',size:11}, boxWidth:20, padding:16, usePointStyle:true, pointStyle:'line' }},
+        tooltip:{
           backgroundColor:'#1e2130', titleColor:'#fff', bodyColor:'#c5c9d6',
           borderColor:'#333750', borderWidth:1,
-          titleFont:{family:'DM Sans',weight:'600',size:13},
-          bodyFont:{family:'DM Sans',size:12},
+          titleFont:{family:'DM Sans',weight:'600',size:13}, bodyFont:{family:'DM Sans',size:12},
           padding:12, cornerRadius:10, displayColors:true,
-          callbacks: { label: ctx => ctx.datasetIndex === 0 ? ` Responses: ${ctx.raw}` : ` Resp/Day: ${(ctx.raw/25).toFixed(2)}` }
+          callbacks:{ label: ctx => ctx.datasetIndex===0 ? ` Responses: ${ctx.raw}` : ` Resp/Day: ${(ctx.raw/25).toFixed(2)}` }
         }
       },
-      scales: {
-        x: { grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#a0a8b8',font:{family:'DM Sans',size:12,weight:'500'}} },
-        y: { grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#a0a8b8',font:{family:'DM Sans',size:11},stepSize:10}, beginAtZero:true }
+      scales:{
+        x:{ grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#a0a8b8',font:{family:'DM Sans',size:12,weight:'500'}} },
+        y:{ grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#a0a8b8',font:{family:'DM Sans',size:11},stepSize:10}, beginAtZero:true }
       }
     }
   });
 
-  // Donut
   const dCtx = document.getElementById('typeChart').getContext('2d');
   typeChart = new Chart(dCtx, {
-    type: 'doughnut',
-    data: {
-      labels: ['Interested / More Info','Other','Forwarded Internally','Meeting Request'],
-      datasets: [{
-        data: [0,0,0,0],
-        backgroundColor: ['#4a90d9','#a0a8b8','#a78bfa','#fbbf24'],
-        borderColor: '#16213e',
-        borderWidth: 3,
-        hoverOffset: 6,
-      }]
+    type:'doughnut',
+    data:{
+      labels:['Interested / More Info','Other','Forwarded Internally','Meeting Request'],
+      datasets:[{ data:[0,0,0,0], backgroundColor:['#4a90d9','#a0a8b8','#a78bfa','#fbbf24'], borderColor:'#16213e', borderWidth:3, hoverOffset:6 }]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '68%',
-      plugins: {
-        legend: { display: false },
-        tooltip: {
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'68%',
+      plugins:{
+        legend:{ display:false },
+        tooltip:{
           backgroundColor:'#1e2130', titleColor:'#fff', bodyColor:'#c5c9d6',
           borderColor:'#333750', borderWidth:1,
-          titleFont:{family:'DM Sans',weight:'600',size:13},
-          bodyFont:{family:'DM Sans',size:12},
+          titleFont:{family:'DM Sans',weight:'600',size:13}, bodyFont:{family:'DM Sans',size:12},
           padding:12, cornerRadius:10,
-          callbacks: {
-            label: ctx => {
-              const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
-              const pct   = total > 0 ? ((ctx.raw/total)*100).toFixed(1) : 0;
-              return ` ${ctx.raw} responses (${pct}%)`;
-            }
-          }
+          callbacks:{ label: ctx => { const t=ctx.dataset.data.reduce((a,b)=>a+b,0); return ` ${ctx.raw} (${t>0?((ctx.raw/t)*100).toFixed(1):0}%)`; } }
         }
       }
     }
