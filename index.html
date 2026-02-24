@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlueTree Marketing — Campaign Performance Report</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --card-border: #2a2d4a;
+    --text: #ffffff;
+    --text-muted: #a0a8b8;
+    --accent: #4a90d9;
+    --accent-glow: rgba(74, 144, 217, 0.15);
+    --green: #2ecc71;
+    --green-glow: rgba(46, 204, 113, 0.12);
+    --amber: #fbbf24;
+    --red: #f87171;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .header-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .header-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .header-sub span {
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  /* KPI Cards */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .kpi {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 22px 18px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    opacity: 0.7;
+  }
+
+  .kpi-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .kpi-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  .kpi-badge {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .kpi-badge.green {
+    background: var(--green-glow);
+    color: var(--green);
+  }
+
+  .kpi-badge.blue {
+    background: var(--accent-glow);
+    color: var(--accent);
+  }
+
+  /* Sections */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+
+  /* Chart */
+  .chart-container {
+    position: relative;
+    height: 280px;
+    margin-bottom: 8px;
+  }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  thead th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  thead th:not(:first-child) {
+    text-align: right;
+  }
+
+  tbody td {
+    padding: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text);
+  }
+
+  tbody td:not(:first-child) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr.highlight td {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .trend-up {
+    color: var(--green);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .trend-down {
+    color: var(--red);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .trend-flat {
+    color: var(--amber);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* Analysis */
+  .analysis {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  .analysis p {
+    margin-bottom: 16px;
+  }
+
+  .analysis strong {
+    color: #fff;
+  }
+
+  .highlight-stat {
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--card-border);
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .footer-text {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* Projection bar */
+  .proj-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .proj-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    min-width: 160px;
+    flex-shrink: 0;
+  }
+
+  .proj-bar-bg {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .proj-bar {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    transition: width 1s ease;
+  }
+
+  .proj-bar.blue {
+    background: linear-gradient(90deg, rgba(74,144,217,0.3), var(--accent));
+  }
+
+  .proj-bar.green {
+    background: linear-gradient(90deg, rgba(46,204,113,0.3), var(--green));
+  }
+
+  .proj-bar.amber {
+    background: linear-gradient(90deg, rgba(251,191,36,0.3), var(--amber));
+  }
+
+  .jan-line {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  @media (max-width: 700px) {
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .kpi-value { font-size: 28px; }
+    .header h1 { font-size: 24px; }
+    .section { padding: 20px; }
+    .proj-row { flex-direction: column; align-items: stretch; }
+    .proj-label { min-width: unset; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <img src="https://images.squarespace-cdn.com/content/v1/658518476ae2bb7cbb022dd8/5921253f-9867-4a80-af42-766a71729436/BLUE+TREE+MARKETING+Logo_white_transparent+background.png?format=1500w" alt="BlueTree Marketing" style="height: 56px; margin-bottom: 24px; display: block; margin-left: auto; margin-right: auto;">
+    <div class="header-label">Campaign Performance Report</div>
+    <h1>Brian Rechtman</h1>
+    <div class="header-sub">August 2025 — February 2026 &nbsp;·&nbsp; <span>240 Total Responses</span></div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-value">240</div>
+      <div class="kpi-label">Total Responses</div>
+      <div class="kpi-badge green">7 months</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-value">1.96</div>
+      <div class="kpi-label">Feb Resp/Day</div>
+      <div class="kpi-badge green">Best pace</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-value">47</div>
+      <div class="kpi-label">Feb Responses</div>
+      <div class="kpi-badge green">On track to beat Jan</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-value">12</div>
+      <div class="kpi-label">Meeting Requests</div>
+      <div class="kpi-badge green">High intent</div>
+    </div>
+  </div>
+
+  <!-- Trend Chart -->
+  <div class="section">
+    <div class="section-title">Response Trend</div>
+    <div class="chart-container">
+      <canvas id="trendChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Monthly Breakdown -->
+  <div class="section">
+    <div class="section-title">Monthly Breakdown</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Responses</th>
+            <th>Days</th>
+            <th>Resp/Day</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>August</td>
+            <td>47</td>
+            <td>31</td>
+            <td>1.52</td>
+          </tr>
+          <tr>
+            <td>September</td>
+            <td>48</td>
+            <td>30</td>
+            <td>1.60</td>
+          </tr>
+          <tr>
+            <td>October</td>
+            <td>22</td>
+            <td>31</td>
+            <td>0.71</td>
+          </tr>
+          <tr>
+            <td>November</td>
+            <td>5</td>
+            <td>30</td>
+            <td>0.17</td>
+          </tr>
+          <tr>
+            <td>December</td>
+            <td>15</td>
+            <td>31</td>
+            <td>0.48</td>
+          </tr>
+          <tr class="highlight">
+            <td>January</td>
+            <td>56</td>
+            <td>31</td>
+            <td>1.81</td>
+          </tr>
+          <tr class="highlight">
+            <td>February *</td>
+            <td>47</td>
+            <td>24</td>
+            <td>1.96</td>
+          </tr>
+          <tr style="background: rgba(52,211,153,0.06);">
+            <td style="color: var(--green); font-style: italic;">Feb projected</td>
+            <td style="color: var(--green); font-style: italic;">55–57</td>
+            <td style="color: var(--green); font-style: italic;">28</td>
+            <td style="color: var(--green); font-style: italic;">1.96+</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Projection -->
+  <div class="section">
+    <div class="section-title">February Projection (4 days remaining)</div>
+    <div style="margin-bottom: 20px;">
+      <div class="proj-row">
+        <div class="proj-label">January (actual)</div>
+        <div class="proj-bar-bg">
+          <div class="proj-bar blue" style="width: 84%;">56</div>
+        </div>
+      </div>
+      <div class="proj-row">
+        <div class="proj-label">Feb — at current pace</div>
+        <div class="proj-bar-bg">
+          <div class="proj-bar green" style="width: 82%;">55</div>
+        </div>
+      </div>
+      <div class="proj-row">
+        <div class="proj-label" style="color: var(--green); font-weight: 600;">Feb — at recent wave pace</div>
+        <div class="proj-bar-bg">
+          <div class="proj-bar green" style="width: 85%;">57</div>
+        </div>
+      </div>
+      <div class="proj-row">
+        <div class="proj-label" style="color: var(--green); font-weight: 600;">Feb — if momentum holds</div>
+        <div class="proj-bar-bg">
+          <div class="proj-bar green" style="width: 100%; background: linear-gradient(90deg, rgba(46,204,113,0.3), var(--green));">67</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <img src="https://images.squarespace-cdn.com/content/v1/658518476ae2bb7cbb022dd8/5921253f-9867-4a80-af42-766a71729436/BLUE+TREE+MARKETING+Logo_white_transparent+background.png?format=1500w" alt="BlueTree Marketing" style="height: 36px; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto; opacity: 0.85;">
+    <div class="footer-text">Report generated February 24, 2026 · Data through February 24, 2026</div>
+  </div>
+
+</div>
+
+<script>
+  const ctx = document.getElementById('trendChart').getContext('2d');
+
+  const gradient = ctx.createLinearGradient(0, 0, 0, 280);
+  gradient.addColorStop(0, 'rgba(74, 144, 217, 0.25)');
+  gradient.addColorStop(1, 'rgba(74, 144, 217, 0.0)');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb *'],
+      datasets: [{
+        label: 'Responses',
+        data: [47, 48, 22, 5, 15, 56, 47],
+        borderColor: '#4a90d9',
+        backgroundColor: gradient,
+        borderWidth: 3,
+        pointBackgroundColor: '#fff',
+        pointBorderColor: '#4a90d9',
+        pointBorderWidth: 2.5,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        tension: 0.35,
+        fill: true,
+      },
+      {
+        label: 'Resp/Day (×25)',
+        data: [1.52*25, 1.60*25, 0.71*25, 0.17*25, 0.48*25, 1.81*25, 1.96*25],
+        borderColor: '#2ecc71',
+        borderWidth: 2,
+        borderDash: [6, 4],
+        pointBackgroundColor: '#2ecc71',
+        pointBorderColor: '#2ecc71',
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        tension: 0.35,
+        fill: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        intersect: false,
+        mode: 'index'
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          align: 'end',
+          labels: {
+            color: '#8a8f9e',
+            font: { family: 'DM Sans', size: 11 },
+            boxWidth: 20,
+            padding: 16,
+            usePointStyle: true,
+            pointStyle: 'line'
+          }
+        },
+        tooltip: {
+          backgroundColor: '#1e2130',
+          titleColor: '#fff',
+          bodyColor: '#c5c9d6',
+          borderColor: '#333750',
+          borderWidth: 1,
+          titleFont: { family: 'DM Sans', weight: '600', size: 13 },
+          bodyFont: { family: 'DM Sans', size: 12 },
+          padding: 12,
+          cornerRadius: 10,
+          displayColors: true,
+          callbacks: {
+            label: function(context) {
+              if (context.datasetIndex === 0) {
+                return ' Responses: ' + context.raw;
+              } else {
+                return ' Resp/Day: ' + (context.raw / 25).toFixed(2);
+              }
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: {
+            color: '#8a8f9e',
+            font: { family: 'DM Sans', size: 12, weight: '500' }
+          }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: {
+            color: '#8a8f9e',
+            font: { family: 'DM Sans', size: 11 },
+            stepSize: 10
+          },
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
