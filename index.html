@@ -258,6 +258,57 @@
   .footer { text-align:center; margin-top:40px; padding-top:24px; border-top:1px solid var(--card-border); }
   .footer-text { font-size:12px; color:var(--text-muted); margin-top:8px; }
 
+  /* ── Info Buttons & Modals ── */
+  .info-btn {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:16px; height:16px; border-radius:50%;
+    background:rgba(160,168,184,0.15); border:1px solid rgba(160,168,184,0.25);
+    color:var(--text-muted); font-size:9px; font-weight:700;
+    cursor:pointer; margin-left:6px; vertical-align:middle;
+    transition:background 0.2s,color 0.2s,border-color 0.2s;
+    font-family:'DM Sans',sans-serif; line-height:1; flex-shrink:0;
+  }
+  .info-btn:hover { background:rgba(74,144,217,0.2); color:var(--accent); border-color:var(--accent); }
+
+  .modal-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(10,12,25,0.88); z-index:1000;
+    align-items:center; justify-content:center; padding:20px;
+    backdrop-filter:blur(6px);
+  }
+  .modal-overlay.open { display:flex; }
+  .modal-box {
+    background:#1c2340; border:1px solid #353d60;
+    border-radius:18px; padding:28px 28px 24px;
+    max-width:500px; width:100%; position:relative;
+    box-shadow:0 28px 70px rgba(0,0,0,0.7);
+    animation:modalIn 0.18s ease;
+  }
+  @keyframes modalIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  .modal-close {
+    position:absolute; top:14px; right:16px;
+    background:none; border:none; color:var(--text-muted);
+    font-size:22px; cursor:pointer; line-height:1;
+    font-family:'DM Sans',sans-serif; transition:color 0.2s;
+  }
+  .modal-close:hover { color:#fff; }
+  .modal-source {
+    display:inline-flex; align-items:center; gap:6px;
+    border-radius:8px; padding:4px 12px;
+    font-size:11px; font-weight:600; letter-spacing:0.5px; margin-bottom:14px;
+  }
+  .modal-source.sheets   { background:rgba(46,204,113,0.1);  border:1px solid rgba(46,204,113,0.25);  color:var(--green); }
+  .modal-source.instantly{ background:rgba(251,191,36,0.1);  border:1px solid rgba(251,191,36,0.25);  color:var(--amber); }
+  .modal-source.calc     { background:rgba(74,144,217,0.1);  border:1px solid rgba(74,144,217,0.25);  color:var(--accent); }
+  .modal-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:#fff; margin-bottom:12px; }
+  .modal-body  { font-size:14px; color:var(--text-muted); line-height:1.8; }
+  .modal-body strong { color:#fff; }
+  .modal-body .formula {
+    background:rgba(255,255,255,0.05); border:1px solid var(--card-border);
+    border-radius:8px; padding:10px 14px; font-family:monospace;
+    font-size:12px; color:var(--accent); margin:12px 0; line-height:1.6;
+  }
+
   @media (max-width:700px) {
     .kpi-row    { grid-template-columns:repeat(2,1fr); }
     .kpi-value  { font-size:28px; }
@@ -312,22 +363,22 @@
   <div class="kpi-row">
     <div class="kpi blue">
       <div class="kpi-value" id="kpi-total">—</div>
-      <div class="kpi-label">Total Leads</div>
+      <div class="kpi-label">Total Leads <button class="info-btn" onclick="openModal('kpi-total')">i</button></div>
       <div class="kpi-badge blue">All campaigns</div>
     </div>
     <div class="kpi green">
       <div class="kpi-value" id="kpi-rate">—</div>
-      <div class="kpi-label">Leads / Day</div>
+      <div class="kpi-label">Leads / Day <button class="info-btn" onclick="openModal('kpi-rate')">i</button></div>
       <div class="kpi-badge green" id="kpi-rate-badge">Current pace</div>
     </div>
     <div class="kpi amber">
       <div class="kpi-value">12</div>
-      <div class="kpi-label">Meeting Requests</div>
+      <div class="kpi-label">Meeting Requests <button class="info-btn" onclick="openModal('kpi-meetings')">i</button></div>
       <div class="kpi-badge amber">High intent</div>
     </div>
     <div class="kpi purple">
       <div class="kpi-value" id="kpi-projected">—</div>
-      <div class="kpi-label">March Forecast</div>
+      <div class="kpi-label">March Forecast <button class="info-btn" onclick="openModal('kpi-forecast')">i</button></div>
       <div class="kpi-badge purple" id="kpi-projected-badge">At current pace</div>
     </div>
   </div>
@@ -339,7 +390,7 @@
     <div class="instantly-badge">
       ⚡ Instantly data · Synced Feb 24, 2026 via BridgeKit
     </div>
-    <div class="section-title">Campaign Funnel Performance</div>
+    <div class="section-title">Campaign Funnel Performance <button class="info-btn" onclick="openModal('funnel')">i</button></div>
     <div class="section-sub">116,252 emails sent across 5 active campaigns — full-funnel conversion breakdown</div>
 
     <div class="funnel">
@@ -416,7 +467,7 @@
 
   <!-- Lead Trend -->
   <div class="section">
-    <div class="section-title">Lead Trend</div>
+    <div class="section-title">Lead Trend <button class="info-btn" onclick="openModal('trend')">i</button></div>
     <div class="section-sub">Monthly leads vs. daily pace — showing campaign momentum over time</div>
     <div class="chart-container">
       <canvas id="trendChart"></canvas>
@@ -426,7 +477,7 @@
   <!-- Monthly Breakdown + Lead Types -->
   <div class="two-col">
     <div class="section">
-      <div class="section-title">Monthly Breakdown</div>
+      <div class="section-title">Monthly Breakdown <button class="info-btn" onclick="openModal('breakdown')">i</button></div>
       <div class="section-sub">Leads and daily pace by month</div>
       <div class="table-wrap">
         <table>
@@ -439,7 +490,7 @@
       <div style="margin-top:12px;font-size:11px;color:var(--text-muted);" id="feb-note">* Current month</div>
     </div>
     <div class="section">
-      <div class="section-title">Lead Types</div>
+      <div class="section-title">Lead Types <button class="info-btn" onclick="openModal('types')">i</button></div>
       <div class="section-sub">How leads are responding to outreach</div>
       <div class="donut-container">
         <canvas id="typeChart"></canvas>
@@ -457,7 +508,7 @@
        PREDICTIVE: MARCH FORECAST
   ════════════════════════════════════════════ -->
   <div class="section">
-    <div class="section-title">March 2026 Forecast</div>
+    <div class="section-title">March 2026 Forecast <button class="info-btn" onclick="openModal('march')">i</button></div>
     <div class="section-sub" id="march-sub">If current pace holds, here's what March looks like across 3 scenarios</div>
 
     <div id="march-scenarios" style="margin-bottom:24px;">
@@ -491,7 +542,7 @@
        PREDICTIVE: MILESTONE TRACKER
   ════════════════════════════════════════════ -->
   <div class="section">
-    <div class="section-title">Lead Milestones</div>
+    <div class="section-title">Lead Milestones <button class="info-btn" onclick="openModal('milestones')">i</button></div>
     <div class="section-sub" id="milestone-sub">At current pace — when will we hit the next targets?</div>
 
     <div class="three-col" id="milestone-cards">
@@ -508,38 +559,38 @@
     <div class="instantly-badge">
       ⚡ Instantly data · Synced Feb 24, 2026 via BridgeKit
     </div>
-    <div class="section-title">Pipeline Health</div>
+    <div class="section-title">Pipeline Health <button class="info-btn" onclick="openModal('pipeline')">i</button></div>
     <div class="section-sub">Key conversion metrics across the full outreach funnel</div>
 
     <div class="health-grid">
       <div class="health-card">
         <div class="health-val" style="color:var(--purple);">0.75%</div>
-        <div class="health-label">Reply Rate</div>
+        <div class="health-label">Reply Rate <button class="info-btn" onclick="openModal('reply-rate')">i</button></div>
         <div class="health-desc">877 replies from 116,252 emails sent. Industry benchmark: 0.5–1%</div>
       </div>
       <div class="health-card">
         <div class="health-val" style="color:var(--green);">27.4%</div>
-        <div class="health-label">Reply → Opportunity</div>
+        <div class="health-label">Reply → Opportunity <button class="info-btn" onclick="openModal('reply-opp')">i</button></div>
         <div class="health-desc">Nearly 1 in 3 replies becomes a qualified opportunity — strong signal quality</div>
       </div>
       <div class="health-card">
         <div class="health-val" style="color:var(--amber);">5.0%</div>
-        <div class="health-label">Opp → Meeting</div>
+        <div class="health-label">Opp → Meeting <button class="info-btn" onclick="openModal('opp-meeting')">i</button></div>
         <div class="health-desc">12 meeting requests from 239 opportunities. Every 20 leads generates a meeting</div>
       </div>
       <div class="health-card">
         <div class="health-val" id="health-next-meeting" style="color:var(--accent);">—</div>
-        <div class="health-label">Leads to Next Meeting</div>
+        <div class="health-label">Leads to Next Meeting <button class="info-btn" onclick="openModal('next-meeting')">i</button></div>
         <div class="health-desc">Estimated leads needed until the next meeting request at 5% conversion rate</div>
       </div>
       <div class="health-card">
         <div class="health-val" style="color:var(--teal);">484</div>
-        <div class="health-label">Emails / Opportunity</div>
+        <div class="health-label">Emails / Opportunity <button class="info-btn" onclick="openModal('emails-opp')">i</button></div>
         <div class="health-desc">Cost to generate 1 qualified lead. Use this to plan list size for target outcomes</div>
       </div>
       <div class="health-card">
         <div class="health-val" id="health-meetings-march" style="color:var(--green);">—</div>
-        <div class="health-label">Projected March Meetings</div>
+        <div class="health-label">Projected March Meetings <button class="info-btn" onclick="openModal('march-meetings')">i</button></div>
         <div class="health-desc">Estimated new meeting requests in March based on forecasted leads × 5%</div>
       </div>
     </div>
@@ -564,6 +615,16 @@
       </div>
     </div>
     <div style="font-size:12px;color:var(--text-muted);" id="proj-note">—</div>
+  </div>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modal-overlay" onclick="handleModalClick(event)">
+    <div class="modal-box" id="modal-box">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <div id="modal-source-tag" class="modal-source"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
   </div>
 
   <!-- Footer -->
@@ -862,6 +923,195 @@ function renderDashboard(rows) {
   document.getElementById('legend-forwarded').textContent  = forwarded;
   document.getElementById('legend-meetings').textContent   = meetings;
 }
+
+// ─────────────────────────────────────────────────────────
+//  Modal System
+// ─────────────────────────────────────────────────────────
+const MODALS = {
+  'kpi-total': {
+    title: 'Total Leads',
+    source: 'sheets', sourceLabel: 'Live · Google Sheets',
+    body: `<strong>What it is:</strong> The total number of positive lead records logged across all months — from August 2025 through today.<br><br>
+<strong>Where it comes from:</strong> Every row in the connected Google Sheet represents one lead response. The dashboard counts all rows in real time each time you hit Refresh.<br><br>
+<div class="formula">Total Leads = COUNT(all rows in sheet)</div>
+<strong>Why it matters:</strong> This is Brian's primary output metric — the raw number of decision-makers who have positively engaged with the outreach campaigns.`
+  },
+  'kpi-rate': {
+    title: 'Leads / Day',
+    source: 'sheets', sourceLabel: 'Live · Google Sheets',
+    body: `<strong>What it is:</strong> How many leads are coming in per day during the current month (February).<br><br>
+<strong>How it's calculated:</strong> The dashboard finds the latest response date in February, counts how many days have passed (e.g. through Feb 24), and divides February's lead count by that number.<br><br>
+<div class="formula">Leads/Day = Feb Lead Count ÷ Days Elapsed in Feb</div>
+<strong>Why it matters:</strong> A rising daily pace is the strongest signal that campaigns are gaining traction. This rate directly drives all forecast calculations.`
+  },
+  'kpi-meetings': {
+    title: 'Meeting Requests',
+    source: 'instantly', sourceLabel: 'Instantly · Synced Feb 24, 2026',
+    body: `<strong>What it is:</strong> The number of replies that explicitly requested a meeting or call with Brian.<br><br>
+<strong>Where it comes from:</strong> Pulled directly from Instantly via BridgeKit on Feb 24, 2026. Instantly tags each reply that its AI classifies as a meeting request.<br><br>
+<strong>Current count:</strong> <strong>12 meetings</strong> from 239 qualified opportunities — a 5% conversion rate from opportunity to meeting.<br><br>
+<strong>Why it matters:</strong> Meeting requests are the highest-intent signal in the funnel. Each one represents a warm prospect ready for a sales conversation.`
+  },
+  'kpi-forecast': {
+    title: 'March Forecast',
+    source: 'calc', sourceLabel: 'Calculated from live + Instantly data',
+    body: `<strong>What it is:</strong> A projected range for how many leads Brian will generate in March 2026.<br><br>
+<strong>How it's calculated:</strong><br>
+<div class="formula">Conservative = Leads/Day × 31 days
+Optimistic   = Conservative × 1.35</div>
+The 35% optimistic boost accounts for the new <strong>Custom Search Query</strong> campaign launched Feb 20 — it's only a few days old and hasn't reached full volume yet. As it ramps through March, it should meaningfully lift the daily pace.<br><br>
+<strong>Why it matters:</strong> This gives Brian and the client a data-backed range to set expectations for the month ahead.`
+  },
+  'funnel': {
+    title: 'Campaign Funnel',
+    source: 'instantly', sourceLabel: 'Instantly · Synced Feb 24, 2026',
+    body: `<strong>What it is:</strong> A full-funnel view from cold email sends down to meeting requests.<br><br>
+<strong>Where it comes from:</strong> All four funnel metrics were pulled from Instantly via BridgeKit on Feb 24, 2026:<br>
+<div class="formula">Emails Sent:  116,252
+Total Replies:    877  (0.75% reply rate)
+Opportunities:    239  (27.4% of replies)
+Meetings:          12  (5.0% of opportunities)</div>
+<strong>How Instantly defines these:</strong><br>
+• <strong>Replies</strong> = any reply received to a campaign email<br>
+• <strong>Opportunities</strong> = replies that Instantly's AI classifies as positive/qualified<br>
+• <strong>Meetings</strong> = replies explicitly requesting a call or meeting<br><br>
+<strong>Why it matters:</strong> This funnel shows the full efficiency of the outreach system — from list quality to message resonance to deal potential.`
+  },
+  'trend': {
+    title: 'Lead Trend Chart',
+    source: 'sheets', sourceLabel: 'Live · Google Sheets',
+    body: `<strong>What it is:</strong> A dual-line chart showing monthly lead volume (blue bars) and the daily pace (green dashed line) side by side.<br><br>
+<strong>Where it comes from:</strong> Every data point is computed live from the Google Sheet each time you refresh.<br><br>
+<div class="formula">Monthly Count  = COUNT(rows where Month = X)
+Leads/Day (×25) = (Count ÷ Days in Month) × 25</div>
+The ×25 multiplier scales the daily rate to be visually comparable to monthly totals on the same axis.<br><br>
+<strong>Why it matters:</strong> The trend line reveals whether momentum is accelerating or decelerating — key for identifying which months saw campaign launches or list changes.`
+  },
+  'breakdown': {
+    title: 'Monthly Breakdown',
+    source: 'sheets', sourceLabel: 'Live · Google Sheets',
+    body: `<strong>What it is:</strong> A month-by-month table of lead counts, daily pace, and growth vs. the prior month — from August 2025 through February 2026.<br><br>
+<strong>Where it comes from:</strong> Computed live from the Google Sheet. The "Month" column in the sheet uses Spanish month names (Agosto, Septiembre, etc.) which the dashboard maps to English.<br><br>
+<div class="formula">Leads/Day = Month Count ÷ Days in Month
+vs Prev    = (This Month - Last Month) ÷ Last Month</div>
+February shows actual data through the latest date in the sheet, with a projected row extrapolated to month-end.<br><br>
+<strong>Why it matters:</strong> The month-over-month trend column quickly shows which months had positive or negative momentum.`
+  },
+  'types': {
+    title: 'Lead Types',
+    source: 'sheets', sourceLabel: 'Live · Google Sheets',
+    body: `<strong>What it is:</strong> A breakdown of how leads are responding to outreach — categorized by response intent.<br><br>
+<strong>Where it comes from:</strong> The Google Sheet has a <strong>Response Type</strong> column. Each row is classified as one of:<br><br>
+• <strong style="color:#4a90d9;">Interested / Requesting More Info</strong> — warm lead asking for details<br>
+• <strong style="color:#a78bfa;">Forwarded Internally</strong> — passed to a colleague or decision-maker<br>
+• <strong style="color:#fbbf24;">Meeting Request</strong> — explicit request for a call or meeting<br>
+• <strong style="color:#a0a8b8;">Other</strong> — unclassified or ambiguous responses<br><br>
+<strong>Why it matters:</strong> The mix of response types reveals how engaged leads are. A high proportion of Meeting Requests and Forwards signals strong message-market fit.`
+  },
+  'march': {
+    title: 'March 2026 Forecast',
+    source: 'calc', sourceLabel: 'Calculated from live sheet data',
+    body: `<strong>What it is:</strong> Three scenarios projecting how many leads Brian will generate in March 2026.<br><br>
+<strong>How each scenario is calculated:</strong><br>
+<div class="formula">Conservative = current Leads/Day × 31 days
+Baseline     = (January count + Feb projected) ÷ 2
+Optimistic   = Conservative × 1.35</div>
+<strong>The new campaign factor:</strong> The <strong>Custom Search Query</strong> campaign launched Feb 20 — just days ago. It hasn't reached full send volume yet. As it ramps up through March, it's expected to add meaningful volume on top of the current pace, making the Optimistic scenario the most realistic if engagement holds.<br><br>
+<strong>Why it matters:</strong> These scenarios give the client a realistic range to plan around — not just a single number.`
+  },
+  'milestones': {
+    title: 'Lead Milestones',
+    source: 'calc', sourceLabel: 'Calculated from live sheet data',
+    body: `<strong>What it is:</strong> Estimated dates for when Brian's cumulative lead count will hit 300, 400, and 500 total leads.<br><br>
+<strong>How it's calculated:</strong><br>
+<div class="formula">Days to Target = CEIL((Target - Total Leads) ÷ Leads/Day)
+Date = Today + Days to Target</div>
+Two paces are shown:<br>
+• <strong>Current pace</strong> — uses the live Leads/Day rate from the sheet<br>
+• <strong>Optimistic pace</strong> — assumes 2.5 leads/day as the new campaign ramps up<br><br>
+<strong>Why it matters:</strong> Milestone tracking gives the client concrete, forward-looking goals and creates natural checkpoints to assess campaign performance.`
+  },
+  'pipeline': {
+    title: 'Pipeline Health',
+    source: 'instantly', sourceLabel: 'Instantly · Synced Feb 24, 2026',
+    body: `<strong>What it is:</strong> Six key conversion ratios that together describe the health and efficiency of the outreach pipeline.<br><br>
+<strong>Where the numbers come from:</strong> The base data — emails sent, total replies, opportunities, meetings — was pulled from Instantly via BridgeKit on Feb 24, 2026. The "Leads to Next Meeting" and "Projected March Meetings" values are calculated dynamically from live Google Sheets data.<br><br>
+<strong>Why it matters:</strong> These ratios let Brian and the client understand not just <em>how many</em> leads are coming in, but <em>how well</em> the system is converting at each stage.`
+  },
+  'reply-rate': {
+    title: 'Reply Rate',
+    source: 'instantly', sourceLabel: 'Instantly · Synced Feb 24, 2026',
+    body: `<strong>What it is:</strong> The percentage of sent emails that received any reply.<br><br>
+<div class="formula">Reply Rate = 877 replies ÷ 116,252 emails sent = 0.75%</div>
+<strong>Industry context:</strong> Cold email reply rates typically range from <strong>0.5% to 1%</strong>. Brian's 0.75% sits comfortably within the healthy range, indicating good list quality and message relevance.<br><br>
+<strong>Where it comes from:</strong> Both the reply count (877) and emails sent (116,252) are from Instantly, pulled via BridgeKit on Feb 24, 2026.`
+  },
+  'reply-opp': {
+    title: 'Reply → Opportunity Rate',
+    source: 'instantly', sourceLabel: 'Instantly · Synced Feb 24, 2026',
+    body: `<strong>What it is:</strong> Of all replies received, what percentage were positive/qualified opportunities.<br><br>
+<div class="formula">Reply → Opp = 239 opportunities ÷ 877 total replies = 27.4%</div>
+<strong>What this means:</strong> Nearly <strong>1 in 3 replies</strong> is a qualified lead — this is a strong signal quality indicator. It means Brian's targeting and messaging are attracting genuinely interested prospects, not just curious or unqualified replies.<br><br>
+<strong>Where it comes from:</strong> Both figures pulled from Instantly via BridgeKit on Feb 24, 2026.`
+  },
+  'opp-meeting': {
+    title: 'Opportunity → Meeting Rate',
+    source: 'instantly', sourceLabel: 'Instantly · Synced Feb 24, 2026',
+    body: `<strong>What it is:</strong> Of all qualified opportunities, what percentage explicitly requested a meeting.<br><br>
+<div class="formula">Opp → Meeting = 12 meetings ÷ 239 opportunities = 5.0%</div>
+<strong>What this means:</strong> For every 20 opportunities (leads), Brian generates approximately 1 meeting request. This is a healthy conversion rate for cold outreach at scale.<br><br>
+<strong>Where it comes from:</strong> Instantly's AI classifies replies as meeting requests. Both figures were pulled via BridgeKit on Feb 24, 2026.`
+  },
+  'next-meeting': {
+    title: 'Leads to Next Meeting',
+    source: 'calc', sourceLabel: 'Calculated: Instantly + Live Sheet',
+    body: `<strong>What it is:</strong> An estimate of how many more leads are needed before the next meeting request comes in.<br><br>
+<div class="formula">Leads per Meeting = ROUND(239 opps ÷ 12 meetings) = ~20
+Leads to Next    = 20 - (Total Leads mod 20)</div>
+<strong>Example:</strong> If Brian has 247 total leads and meetings arrive every ~20 leads, then he needs about 13 more leads before the next meeting is statistically expected.<br><br>
+<strong>Live element:</strong> The total lead count updates from the Google Sheet, so this number changes with every refresh.`
+  },
+  'emails-opp': {
+    title: 'Emails per Opportunity',
+    source: 'instantly', sourceLabel: 'Instantly · Synced Feb 24, 2026',
+    body: `<strong>What it is:</strong> How many emails need to be sent, on average, to generate one qualified lead opportunity.<br><br>
+<div class="formula">Emails per Opp = 116,252 emails ÷ 239 opportunities = 484</div>
+<strong>How to use this:</strong> This is Brian's "cost per lead" in email units. If you want to hit 50 new opportunities in March, you need to have roughly <strong>24,200 emails</strong> queued up.<br><br>
+<strong>Why it matters:</strong> This metric is essential for capacity planning — it directly connects list size and send volume to expected lead output.`
+  },
+  'march-meetings': {
+    title: 'Projected March Meetings',
+    source: 'calc', sourceLabel: 'Calculated: Instantly + Live Sheet',
+    body: `<strong>What it is:</strong> An estimate of how many new meeting requests Brian can expect in March 2026.<br><br>
+<div class="formula">March Meetings = ROUND(March Conservative Forecast × 5%)</div>
+<strong>The 5% rate</strong> comes from the historical Instantly data: 12 meetings from 239 opportunities = 5.0% conversion.<br><br>
+<strong>The March forecast</strong> uses the conservative scenario (current Leads/Day × 31 days), so this estimate is intentionally conservative. With the new campaign ramping, actual results could be higher.<br><br>
+<strong>Live element:</strong> This recalculates automatically when you refresh sheet data, since it depends on the current Leads/Day pace.`
+  }
+};
+
+function openModal(id) {
+  const m = MODALS[id];
+  if (!m) return;
+  const srcIcons = { sheets: '📊', instantly: '⚡', calc: '🔢' };
+  document.getElementById('modal-source-tag').className = 'modal-source ' + m.source;
+  document.getElementById('modal-source-tag').innerHTML = (srcIcons[m.source] || '') + ' ' + m.sourceLabel;
+  document.getElementById('modal-title').textContent = m.title;
+  document.getElementById('modal-body').innerHTML = m.body;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleModalClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 // ─────────────────────────────────────────────────────────
 //  Chart init
