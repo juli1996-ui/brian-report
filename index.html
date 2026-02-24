@@ -18,7 +18,10 @@
     --green: #2ecc71;
     --green-glow: rgba(46, 204, 113, 0.12);
     --amber: #fbbf24;
+    --amber-glow: rgba(251, 191, 36, 0.12);
     --red: #f87171;
+    --purple: #a78bfa;
+    --purple-glow: rgba(167, 139, 250, 0.12);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -62,6 +65,7 @@
   .header-sub {
     font-size: 14px;
     color: var(--text-muted);
+    margin-bottom: 12px;
   }
 
   .header-sub span {
@@ -69,12 +73,39 @@
     font-weight: 600;
   }
 
+  .sync-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(46, 204, 113, 0.08);
+    border: 1px solid rgba(46, 204, 113, 0.2);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 11px;
+    color: var(--green);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .sync-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
   /* KPI Cards */
   .kpi-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
   }
 
   .kpi {
@@ -92,9 +123,13 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--green));
     opacity: 0.7;
   }
+
+  .kpi.blue::before  { background: linear-gradient(90deg, var(--accent), #7bc3ff); }
+  .kpi.green::before { background: linear-gradient(90deg, var(--green), #7fffc4); }
+  .kpi.amber::before { background: linear-gradient(90deg, var(--amber), #ffe066); }
+  .kpi.purple::before { background: linear-gradient(90deg, var(--purple), #c4b5fd); }
 
   .kpi-value {
     font-family: 'Playfair Display', serif;
@@ -122,15 +157,10 @@
     border-radius: 20px;
   }
 
-  .kpi-badge.green {
-    background: var(--green-glow);
-    color: var(--green);
-  }
-
-  .kpi-badge.blue {
-    background: var(--accent-glow);
-    color: var(--accent);
-  }
+  .kpi-badge.green  { background: var(--green-glow); color: var(--green); }
+  .kpi-badge.blue   { background: var(--accent-glow); color: var(--accent); }
+  .kpi-badge.amber  { background: var(--amber-glow); color: var(--amber); }
+  .kpi-badge.purple { background: var(--purple-glow); color: var(--purple); }
 
   /* Sections */
   .section {
@@ -149,17 +179,59 @@
     margin-bottom: 20px;
   }
 
-  /* Chart */
+  /* Charts */
   .chart-container {
     position: relative;
     height: 280px;
     margin-bottom: 8px;
   }
 
-  /* Table */
-  .table-wrap {
-    overflow-x: auto;
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
   }
+
+  .two-col .section {
+    margin-bottom: 0;
+  }
+
+  .donut-container {
+    position: relative;
+    height: 220px;
+  }
+
+  .donut-legend {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-count {
+    margin-left: auto;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; }
 
   table {
     width: 100%;
@@ -178,9 +250,7 @@
     border-bottom: 1px solid var(--card-border);
   }
 
-  thead th:not(:first-child) {
-    text-align: right;
-  }
+  thead th:not(:first-child) { text-align: right; }
 
   tbody td {
     padding: 14px;
@@ -193,52 +263,12 @@
     font-variant-numeric: tabular-nums;
   }
 
-  tbody tr:last-child td {
-    border-bottom: none;
-  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.highlight td { color: #fff; font-weight: 600; }
 
-  tbody tr.highlight td {
-    color: #fff;
-    font-weight: 600;
-  }
-
-  .trend-up {
-    color: var(--green);
-    font-weight: 600;
-    font-size: 12px;
-  }
-
-  .trend-down {
-    color: var(--red);
-    font-weight: 600;
-    font-size: 12px;
-  }
-
-  .trend-flat {
-    color: var(--amber);
-    font-weight: 600;
-    font-size: 12px;
-  }
-
-  /* Analysis */
-  .analysis {
-    font-size: 15px;
-    line-height: 1.75;
-    color: var(--text);
-  }
-
-  .analysis p {
-    margin-bottom: 16px;
-  }
-
-  .analysis strong {
-    color: #fff;
-  }
-
-  .highlight-stat {
-    color: var(--green);
-    font-weight: 600;
-  }
+  .trend-up   { color: var(--green); font-weight: 600; font-size: 12px; }
+  .trend-down { color: var(--red);   font-weight: 600; font-size: 12px; }
+  .trend-flat { color: var(--amber); font-weight: 600; font-size: 12px; }
 
   /* Footer */
   .footer {
@@ -248,17 +278,10 @@
     border-top: 1px solid var(--card-border);
   }
 
-  .footer-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 16px;
-    color: var(--accent);
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
   .footer-text {
     font-size: 12px;
     color: var(--text-muted);
+    margin-top: 8px;
   }
 
   /* Projection bar */
@@ -272,7 +295,7 @@
   .proj-label {
     font-size: 13px;
     color: var(--text-muted);
-    min-width: 160px;
+    min-width: 170px;
     flex-shrink: 0;
   }
 
@@ -298,34 +321,16 @@
     transition: width 1s ease;
   }
 
-  .proj-bar.blue {
-    background: linear-gradient(90deg, rgba(74,144,217,0.3), var(--accent));
-  }
-
-  .proj-bar.green {
-    background: linear-gradient(90deg, rgba(46,204,113,0.3), var(--green));
-  }
-
-  .proj-bar.amber {
-    background: linear-gradient(90deg, rgba(251,191,36,0.3), var(--amber));
-  }
-
-  .jan-line {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--accent);
-    opacity: 0.5;
-  }
+  .proj-bar.blue  { background: linear-gradient(90deg, rgba(74,144,217,0.3), var(--accent)); }
+  .proj-bar.green { background: linear-gradient(90deg, rgba(46,204,113,0.3), var(--green)); }
 
   @media (max-width: 700px) {
-    .kpi-row { grid-template-columns: repeat(2, 1fr); }
-    .kpi-value { font-size: 28px; }
-    .header h1 { font-size: 24px; }
-    .section { padding: 20px; }
-    .proj-row { flex-direction: column; align-items: stretch; }
+    .kpi-row    { grid-template-columns: repeat(2, 1fr); }
+    .kpi-value  { font-size: 28px; }
+    .header h1  { font-size: 24px; }
+    .section    { padding: 20px; }
+    .two-col    { grid-template-columns: 1fr; }
+    .proj-row   { flex-direction: column; align-items: stretch; }
     .proj-label { min-width: unset; }
   }
 </style>
@@ -340,29 +345,33 @@
     <div class="header-label">Campaign Performance Report</div>
     <h1>Brian Rechtman</h1>
     <div class="header-sub">August 2025 — February 2026 &nbsp;·&nbsp; <span>240 Total Responses</span></div>
+    <div class="sync-badge">
+      <span class="sync-dot"></span>
+      Synced from Google Sheets · Feb 24, 2026
+    </div>
   </div>
 
   <!-- KPI Cards -->
   <div class="kpi-row">
-    <div class="kpi">
+    <div class="kpi blue">
       <div class="kpi-value">240</div>
       <div class="kpi-label">Total Responses</div>
-      <div class="kpi-badge green">7 months</div>
+      <div class="kpi-badge blue">7 months</div>
     </div>
-    <div class="kpi">
+    <div class="kpi green">
       <div class="kpi-value">1.96</div>
-      <div class="kpi-label">Feb Resp/Day</div>
+      <div class="kpi-label">Feb Resp / Day</div>
       <div class="kpi-badge green">Best pace</div>
     </div>
-    <div class="kpi">
-      <div class="kpi-value">47</div>
-      <div class="kpi-label">Feb Responses</div>
-      <div class="kpi-badge green">On track to beat Jan</div>
-    </div>
-    <div class="kpi">
+    <div class="kpi amber">
       <div class="kpi-value">12</div>
       <div class="kpi-label">Meeting Requests</div>
-      <div class="kpi-badge green">High intent</div>
+      <div class="kpi-badge amber">High intent</div>
+    </div>
+    <div class="kpi purple">
+      <div class="kpi-value">16</div>
+      <div class="kpi-label">Forwarded Internally</div>
+      <div class="kpi-badge purple">Warm leads</div>
     </div>
   </div>
 
@@ -374,74 +383,104 @@
     </div>
   </div>
 
-  <!-- Monthly Breakdown -->
-  <div class="section">
-    <div class="section-title">Monthly Breakdown</div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Month</th>
-            <th>Responses</th>
-            <th>Days</th>
-            <th>Resp/Day</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>August</td>
-            <td>47</td>
-            <td>31</td>
-            <td>1.52</td>
-          </tr>
-          <tr>
-            <td>September</td>
-            <td>48</td>
-            <td>30</td>
-            <td>1.60</td>
-          </tr>
-          <tr>
-            <td>October</td>
-            <td>22</td>
-            <td>31</td>
-            <td>0.71</td>
-          </tr>
-          <tr>
-            <td>November</td>
-            <td>5</td>
-            <td>30</td>
-            <td>0.17</td>
-          </tr>
-          <tr>
-            <td>December</td>
-            <td>15</td>
-            <td>31</td>
-            <td>0.48</td>
-          </tr>
-          <tr class="highlight">
-            <td>January</td>
-            <td>56</td>
-            <td>31</td>
-            <td>1.81</td>
-          </tr>
-          <tr class="highlight">
-            <td>February *</td>
-            <td>47</td>
-            <td>24</td>
-            <td>1.96</td>
-          </tr>
-          <tr style="background: rgba(52,211,153,0.06);">
-            <td style="color: var(--green); font-style: italic;">Feb projected</td>
-            <td style="color: var(--green); font-style: italic;">55–57</td>
-            <td style="color: var(--green); font-style: italic;">28</td>
-            <td style="color: var(--green); font-style: italic;">1.96+</td>
-          </tr>
-        </tbody>
-      </table>
+  <!-- Monthly Breakdown + Response Types side by side -->
+  <div class="two-col">
+
+    <!-- Monthly Breakdown -->
+    <div class="section">
+      <div class="section-title">Monthly Breakdown</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Resp</th>
+              <th>/ Day</th>
+              <th>vs Prev</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>August</td>
+              <td>47</td>
+              <td>1.52</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>September</td>
+              <td>48</td>
+              <td>1.60</td>
+              <td class="trend-up">+2%</td>
+            </tr>
+            <tr>
+              <td>October</td>
+              <td>22</td>
+              <td>0.71</td>
+              <td class="trend-down">−54%</td>
+            </tr>
+            <tr>
+              <td>November</td>
+              <td>5</td>
+              <td>0.17</td>
+              <td class="trend-down">−77%</td>
+            </tr>
+            <tr>
+              <td>December</td>
+              <td>15</td>
+              <td>0.48</td>
+              <td class="trend-up">+183%</td>
+            </tr>
+            <tr class="highlight">
+              <td>January</td>
+              <td>56</td>
+              <td>1.81</td>
+              <td class="trend-up">+277%</td>
+            </tr>
+            <tr class="highlight">
+              <td>February *</td>
+              <td>47</td>
+              <td>1.96</td>
+              <td class="trend-up">+8%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top: 12px; font-size: 11px; color: var(--text-muted);">* Through Feb 24 · 28 days total</div>
     </div>
+
+    <!-- Response Type Breakdown -->
+    <div class="section">
+      <div class="section-title">Response Types</div>
+      <div class="donut-container">
+        <canvas id="typeChart"></canvas>
+      </div>
+      <div class="donut-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#4a90d9;"></div>
+          Interested / More Info
+          <span class="legend-count">177</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#a0a8b8;"></div>
+          Other
+          <span class="legend-count">31</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#a78bfa;"></div>
+          Forwarded Internally
+          <span class="legend-count">16</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#fbbf24;"></div>
+          Meeting Request
+          <span class="legend-count">12</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Projection -->
+  <!-- February Projection -->
   <div class="section">
     <div class="section-title">February Projection (4 days remaining)</div>
     <div style="margin-bottom: 20px;">
@@ -452,132 +491,155 @@
         </div>
       </div>
       <div class="proj-row">
-        <div class="proj-label">Feb — at current pace</div>
+        <div class="proj-label">Feb so far</div>
+        <div class="proj-bar-bg">
+          <div class="proj-bar blue" style="width: 70%;">47</div>
+        </div>
+      </div>
+      <div class="proj-row">
+        <div class="proj-label" style="color: var(--green); font-weight: 600;">Feb — at current pace</div>
         <div class="proj-bar-bg">
           <div class="proj-bar green" style="width: 82%;">55</div>
         </div>
       </div>
       <div class="proj-row">
-        <div class="proj-label" style="color: var(--green); font-weight: 600;">Feb — at recent wave pace</div>
-        <div class="proj-bar-bg">
-          <div class="proj-bar green" style="width: 85%;">57</div>
-        </div>
-      </div>
-      <div class="proj-row">
         <div class="proj-label" style="color: var(--green); font-weight: 600;">Feb — if momentum holds</div>
         <div class="proj-bar-bg">
-          <div class="proj-bar green" style="width: 100%; background: linear-gradient(90deg, rgba(46,204,113,0.3), var(--green));">67</div>
+          <div class="proj-bar green" style="width: 90%;">~60</div>
         </div>
       </div>
     </div>
+    <div style="font-size: 12px; color: var(--text-muted);">At 1.96 resp/day × 4 remaining days = ~8 more · Projected total: 55–60</div>
   </div>
 
   <!-- Footer -->
   <div class="footer">
     <img src="https://images.squarespace-cdn.com/content/v1/658518476ae2bb7cbb022dd8/5921253f-9867-4a80-af42-766a71729436/BLUE+TREE+MARKETING+Logo_white_transparent+background.png?format=1500w" alt="BlueTree Marketing" style="height: 36px; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto; opacity: 0.85;">
-    <div class="footer-text">Report generated February 24, 2026 · Data through February 24, 2026</div>
+    <div class="footer-text">Data synced from Google Sheets · February 24, 2026 · 240 responses · Aug 2025 – Feb 2026</div>
   </div>
 
 </div>
 
 <script>
-  const ctx = document.getElementById('trendChart').getContext('2d');
+  // ── Trend Chart ──────────────────────────────────────────────
+  const tCtx = document.getElementById('trendChart').getContext('2d');
+  const tGrad = tCtx.createLinearGradient(0, 0, 0, 280);
+  tGrad.addColorStop(0, 'rgba(74, 144, 217, 0.25)');
+  tGrad.addColorStop(1, 'rgba(74, 144, 217, 0.00)');
 
-  const gradient = ctx.createLinearGradient(0, 0, 0, 280);
-  gradient.addColorStop(0, 'rgba(74, 144, 217, 0.25)');
-  gradient.addColorStop(1, 'rgba(74, 144, 217, 0.0)');
+  const months     = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb *'];
+  const responses  = [47, 48, 22, 5, 15, 56, 47];
+  const rateX25    = [1.52, 1.60, 0.71, 0.17, 0.48, 1.81, 1.96].map(r => r * 25);
 
-  new Chart(ctx, {
+  new Chart(tCtx, {
     type: 'line',
     data: {
-      labels: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb *'],
-      datasets: [{
-        label: 'Responses',
-        data: [47, 48, 22, 5, 15, 56, 47],
-        borderColor: '#4a90d9',
-        backgroundColor: gradient,
-        borderWidth: 3,
-        pointBackgroundColor: '#fff',
-        pointBorderColor: '#4a90d9',
-        pointBorderWidth: 2.5,
-        pointRadius: 6,
-        pointHoverRadius: 8,
-        tension: 0.35,
-        fill: true,
-      },
-      {
-        label: 'Resp/Day (×25)',
-        data: [1.52*25, 1.60*25, 0.71*25, 0.17*25, 0.48*25, 1.81*25, 1.96*25],
-        borderColor: '#2ecc71',
-        borderWidth: 2,
-        borderDash: [6, 4],
-        pointBackgroundColor: '#2ecc71',
-        pointBorderColor: '#2ecc71',
-        pointRadius: 4,
-        pointHoverRadius: 6,
-        tension: 0.35,
-        fill: false,
-      }]
+      labels: months,
+      datasets: [
+        {
+          label: 'Responses',
+          data: responses,
+          borderColor: '#4a90d9',
+          backgroundColor: tGrad,
+          borderWidth: 3,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: '#4a90d9',
+          pointBorderWidth: 2.5,
+          pointRadius: 6,
+          pointHoverRadius: 8,
+          tension: 0.35,
+          fill: true,
+        },
+        {
+          label: 'Resp/Day (×25)',
+          data: rateX25,
+          borderColor: '#2ecc71',
+          borderWidth: 2,
+          borderDash: [6, 4],
+          pointBackgroundColor: '#2ecc71',
+          pointBorderColor: '#2ecc71',
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          tension: 0.35,
+          fill: false,
+        }
+      ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      interaction: {
-        intersect: false,
-        mode: 'index'
-      },
+      interaction: { intersect: false, mode: 'index' },
       plugins: {
         legend: {
-          display: true,
-          position: 'top',
-          align: 'end',
+          display: true, position: 'top', align: 'end',
           labels: {
-            color: '#8a8f9e',
+            color: '#a0a8b8',
             font: { family: 'DM Sans', size: 11 },
-            boxWidth: 20,
-            padding: 16,
-            usePointStyle: true,
-            pointStyle: 'line'
+            boxWidth: 20, padding: 16,
+            usePointStyle: true, pointStyle: 'line'
           }
         },
         tooltip: {
           backgroundColor: '#1e2130',
-          titleColor: '#fff',
-          bodyColor: '#c5c9d6',
-          borderColor: '#333750',
-          borderWidth: 1,
+          titleColor: '#fff', bodyColor: '#c5c9d6',
+          borderColor: '#333750', borderWidth: 1,
           titleFont: { family: 'DM Sans', weight: '600', size: 13 },
           bodyFont: { family: 'DM Sans', size: 12 },
-          padding: 12,
-          cornerRadius: 10,
-          displayColors: true,
+          padding: 12, cornerRadius: 10, displayColors: true,
           callbacks: {
-            label: function(context) {
-              if (context.datasetIndex === 0) {
-                return ' Responses: ' + context.raw;
-              } else {
-                return ' Resp/Day: ' + (context.raw / 25).toFixed(2);
-              }
-            }
+            label: ctx => ctx.datasetIndex === 0
+              ? ' Responses: ' + ctx.raw
+              : ' Resp/Day: ' + (ctx.raw / 25).toFixed(2)
           }
         }
       },
       scales: {
         x: {
           grid: { color: 'rgba(255,255,255,0.04)' },
-          ticks: {
-            color: '#8a8f9e',
-            font: { family: 'DM Sans', size: 12, weight: '500' }
-          }
+          ticks: { color: '#a0a8b8', font: { family: 'DM Sans', size: 12, weight: '500' } }
         },
         y: {
           grid: { color: 'rgba(255,255,255,0.04)' },
-          ticks: {
-            color: '#8a8f9e',
-            font: { family: 'DM Sans', size: 11 },
-            stepSize: 10
-          },
+          ticks: { color: '#a0a8b8', font: { family: 'DM Sans', size: 11 }, stepSize: 10 },
           beginAtZero: true
+        }
+      }
+    }
+  });
+
+  // ── Response Type Donut ──────────────────────────────────────
+  const dCtx = document.getElementById('typeChart').getContext('2d');
+  new Chart(dCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Interested / More Info', 'Other', 'Forwarded Internally', 'Meeting Request'],
+      datasets: [{
+        data: [177, 31, 16, 12],
+        backgroundColor: ['#4a90d9', '#a0a8b8', '#a78bfa', '#fbbf24'],
+        borderColor: '#16213e',
+        borderWidth: 3,
+        hoverOffset: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '68%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1e2130',
+          titleColor: '#fff', bodyColor: '#c5c9d6',
+          borderColor: '#333750', borderWidth: 1,
+          titleFont: { family: 'DM Sans', weight: '600', size: 13 },
+          bodyFont: { family: 'DM Sans', size: 12 },
+          padding: 12, cornerRadius: 10,
+          callbacks: {
+            label: ctx => {
+              const pct = ((ctx.raw / 240) * 100).toFixed(1);
+              return ` ${ctx.raw} responses (${pct}%)`;
+            }
+          }
         }
       }
     }
